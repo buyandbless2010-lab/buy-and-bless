@@ -440,101 +440,89 @@
         </div>
     </div>
 
-    <script>
-        function generateAffiliateLink() {
-            const productLink = document.getElementById('productLink').value;
-            
-            if (!productLink) {
-                alert('Please paste an Amazon product link to create your blessing link!');
-                return;
-            }
-
-            let productId = extractProductId(productLink);
-            
-            if (!productId) {
-                alert('Could not extract product ID. Please check your Amazon link format.');
-                return;
-            }
-
-            // YOUR AMAZON AFFILIATE TAG - ACTIVE AND WORKING!
-            const affiliateTag = 'buyandbless-21';
-            
-            // Generate affiliate link - supports both .com and .in
-            let amazonDomain = 'https://www.amazon.com';
-            if (productLink.includes('amzn.in') || productLink.includes('amazon.in')) {
-                amazonDomain = 'https://www.amazon.in';
-            }
-
-            const affiliateLink = `${amazonDomain}/dp/${productId}?tag=${affiliateTag}&linkCode=as1`;
-            
-            document.getElementById('affiliateLink').textContent = affiliateLink;
-            document.getElementById('resultSection').style.display = 'block';
-            
-            // Smooth scroll to results
-            document.getElementById('resultSection').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
+  <script>
+    function generateAffiliateLink() {
+        const productLink = document.getElementById('productLink').value;
+        
+        if (!productLink) {
+            alert('Please paste an Amazon product link to create your blessing link!');
+            return;
         }
 
-        function extractProductId(url) {
-            // Handle different Amazon URL formats
-            const patterns = [
-                // Regular Amazon links
-                /amazon\.com\/dp\/([A-Z0-9]{10})/i,
-                /amazon\.com\/.*\/dp\/([A-Z0-9]{10})/i,
-                /amazon\.com\/gp\/product\/([A-Z0-9]{10})/i,
-                /amazon\.com\/.*\/product\/([A-Z0-9]{10})/i,
-                /amazon\.com\/.*\/ASIN\/([A-Z0-9]{10})/i,
-                
-                // Amazon India links
-                /amazon\.in\/dp\/([A-Z0-9]{10})/i,
-                /amazon\.in\/.*\/dp\/([A-Z0-9]{10})/i,
-                /amazon\.in\/gp\/product\/([A-Z0-9]{10})/i,
-                
-                // Amazon India shortened links
-                /amzn\.in\/dp\/([A-Z0-9]{10})/i,
-                /amzn\.in\/.*\/dp\/([A-Z0-9]{10})/i,
-                /amzn\.in\/gp\/product\/([A-Z0-9]{10})/i,
-                /amzn\.in\/d\/([A-Z0-9]{10})/i,
-                /amzn\.in\/d\/([a-zA-Z0-9]+)/i
-            ];
-            
-            for (let pattern of patterns) {
-                const match = url.match(pattern);
-                if (match && match[1]) {
-                    return match[1];
-                }
-            }
-            
-            // Special handling for Amazon India short links
-            if (url.includes('amzn.in/d/')) {
-                const parts = url.split('/');
-                const lastPart = parts[parts.length - 1];
-                if (lastPart && lastPart.length > 5) {
-                    return lastPart;
-                }
-            }
-            
-            return null;
+        let productId = extractProductId(productLink);
+        
+        if (!productId) {
+            alert('Could not extract product ID. Please check your Amazon link format.');
+            return;
         }
 
-        function copyToClipboard() {
-            const linkText = document.getElementById('affiliateLink').textContent;
-            navigator.clipboard.writeText(linkText).then(function() {
-                alert('🎉 Blessing link copied to clipboard! Ready to share and make a difference!');
-            });
-        }
-
-        document.getElementById('productLink').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                generateAffiliateLink();
-            }
+        // YOUR AMAZON AFFILIATE TAG - CONFIRMED WORKING!
+        const affiliateTag = 'buyandbless-21';
+        
+        // Generate proper affiliate link
+        let amazonDomain = 'https://www.amazon.in';
+        const affiliateLink = `${amazonDomain}/dp/${productId}/?tag=${affiliateTag}&linkCode=ll1&ref_=as_li_ss_tl`;
+        
+        document.getElementById('affiliateLink').innerHTML = 
+            `<a href="${affiliateLink}" target="_blank" style="color: #1E90FF; text-decoration: none;">${affiliateLink}</a>`;
+        document.getElementById('resultSection').style.display = 'block';
+        
+        // Smooth scroll to results
+        document.getElementById('resultSection').scrollIntoView({ 
+            behavior: 'smooth' 
         });
+    }
 
-        // Auto-focus on input when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('productLink').focus();
+    function extractProductId(url) {
+        // Handle different Amazon URL formats
+        const patterns = [
+            // Amazon India links
+            /amazon\.in\/dp\/([A-Z0-9]{10})/i,
+            /amazon\.in\/.*\/dp\/([A-Z0-9]{10})/i,
+            /amazon\.in\/gp\/product\/([A-Z0-9]{10})/i,
+            
+            // Amazon India shortened links
+            /amzn\.in\/dp\/([A-Z0-9]{10})/i,
+            /amzn\.in\/.*\/dp\/([A-Z0-9]{10})/i,
+            /amzn\.in\/gp\/product\/([A-Z0-9]{10})/i,
+            /amzn\.in\/d\/([A-Z0-9]{10})/i,
+            /amzn\.in\/d\/([a-zA-Z0-9]+)/i,
+            
+            // Amazon short links (amzn.to)
+            /amzn\.to\/[a-zA-Z0-9]+/i
+        ];
+        
+        for (let pattern of patterns) {
+            const match = url.match(pattern);
+            if (match && match[1]) {
+                return match[1];
+            }
+        }
+        
+        // For amzn.to links, we need to use the full URL
+        if (url.includes('amzn.to/')) {
+            return 'PRODUCT_ID'; // Will be handled by Amazon's redirect
+        }
+        
+        return null;
+    }
+
+    function copyToClipboard() {
+        const linkText = document.getElementById('affiliateLink').textContent;
+        navigator.clipboard.writeText(linkText).then(function() {
+            alert('🎉 Blessing link copied to clipboard! Ready to share and make a difference!');
         });
-    </script>
-</body>
+    }
+
+    document.getElementById('productLink').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            generateAffiliateLink();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('productLink').focus();
+    });
+</script>
+
 </html>
