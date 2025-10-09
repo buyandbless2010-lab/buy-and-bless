@@ -440,7 +440,7 @@
         </div>
     </div>
 
-  <script>
+<script>
     function generateAffiliateLink() {
         const productLink = document.getElementById('productLink').value;
         
@@ -459,9 +459,11 @@
         // YOUR AMAZON AFFILIATE TAG - CONFIRMED WORKING!
         const affiliateTag = 'buyandbless-21';
         
-        // Generate proper affiliate link
+        // Generate proper Amazon India affiliate link
         let amazonDomain = 'https://www.amazon.in';
-        const affiliateLink = `${amazonDomain}/dp/${productId}/?tag=${affiliateTag}&linkCode=ll1&ref_=as_li_ss_tl`;
+        
+        // CORRECT AMAZON INDIA AFFILIATE FORMAT
+        const affiliateLink = `${amazonDomain}/dp/${productId}/?tag=${affiliateTag}`;
         
         document.getElementById('affiliateLink').innerHTML = 
             `<a href="${affiliateLink}" target="_blank" style="color: #1E90FF; text-decoration: none;">${affiliateLink}</a>`;
@@ -485,11 +487,8 @@
             /amzn\.in\/dp\/([A-Z0-9]{10})/i,
             /amzn\.in\/.*\/dp\/([A-Z0-9]{10})/i,
             /amzn\.in\/gp\/product\/([A-Z0-9]{10})/i,
-            /amzn\.in\/d\/([A-Z0-9]{10})/i,
-            /amzn\.in\/d\/([a-zA-Z0-9]+)/i,
-            
-            // Amazon short links (amzn.to)
-            /amzn\.to\/[a-zA-Z0-9]+/i
+            /amzn\.in\/d\/([a-zA-Z0-9]{10})/i,
+            /amzn\.in\/d\/([a-zA-Z0-9]+)/i
         ];
         
         for (let pattern of patterns) {
@@ -499,9 +498,13 @@
             }
         }
         
-        // For amzn.to links, we need to use the full URL
-        if (url.includes('amzn.to/')) {
-            return 'PRODUCT_ID'; // Will be handled by Amazon's redirect
+        // Special handling for Amazon India short links
+        if (url.includes('amzn.in/d/')) {
+            const parts = url.split('/');
+            const lastPart = parts[parts.length - 1];
+            if (lastPart && lastPart.length >= 7) {
+                return lastPart;
+            }
         }
         
         return null;
@@ -524,5 +527,3 @@
         document.getElementById('productLink').focus();
     });
 </script>
-
-</html>
