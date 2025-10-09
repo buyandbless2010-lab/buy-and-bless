@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy and Bless - Charity Affiliate Marketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-main {
+            font-size: 4.2em;
+            font-weight: 700;
+            color: #000000;
+            line-height: 1;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -1px;
+        }
+
+        .logo-b {
+            display: inline-block;
+            transform: scale(1.3);
+            margin: 0 -8px;
+            background: linear-gradient(45deg, #1a1a1a, #404040);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .tagline {
+            color: #1E90FF;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .banner {
+            background: linear-gradient(45deg, #00BFFF, #1E90FF);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
+        }
+
+        .banner h1 {
+            font-size: 2.1em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .banner p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            border-color: #1E90FF;
+            outline: none;
+            box-shadow: 0 0 8px rgba(30, 144, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: linear-gradient(45deg, #1E90FF, #00BFFF);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
+            font-family: 'Inter', sans-serif;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.4);
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #1E90FF;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #affiliateLink {
+            background: white;
+            padding: 15px;
+            border: 2px dashed #1E90FF;
+            border-radius: 8px;
+            word-break: break-all;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            background: linear-gradient(45deg, #00BFFF, #1E90FF);
+        }
+
+        .amazon-btn {
+            background: linear-gradient(45deg, #FF9900, #FFAC31);
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        .amazon-btn:hover {
+            background: linear-gradient(45deg, #FF8C00, #FF9900);
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+            color: #1E90FF;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1E90FF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e6f7ff;
+            border-radius: 10px;
+            border-left: 5px solid #1E90FF;
+        }
+
+        .instructions h3 {
+            color: #1E90FF;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-box {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #1E90FF;
+        }
+
+        .feature-box h3 {
+            color: #1E90FF;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .mission-statement {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: linear-gradient(45deg, #f8f9fa, #f0f8ff);
+            border-radius: 10px;
+            border: 2px solid #1E90FF;
+        }
+
+        .mission-statement h3 {
+            color: #1E90FF;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid #e6f7ff;
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-card .icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .benefit-card h4 {
+            color: #1E90FF;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .benefit-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        .footer h3 {
+            color: #1E90FF;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #1E90FF;
+            z-index: 1;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 0 10px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #1E90FF;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .step div:last-child {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo-main {
+                font-size: 3em;
+            }
+            
+            .banner h1 {
+                font-size: 1.8em;
+            }
+            
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-indicator {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .step-indicator::before {
+                display: none;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-main">
+                <span class="logo-b">B</span>uy and <span class="logo-b">B</span>less
+            </div>
+            <div class="logo-subtitle">Charity Affiliate Marketing</div>
+            <div class="tagline">Shop with Purpose, Bless with Every Purchase</div>
+            <div class="banner">
+                <h1>Amazon Affiliate Link Generator</h1>
+                <p>Transform any Amazon product into a blessing opportunity!</p>
+            </div>
+        </div>
+
+        <div class="mission-statement">
+            <h3>💫 Our Mission</h3>
+            <p>Turning everyday purchases into blessings for those in need through the power of affiliate marketing.</p>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>Paste Link</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>Generate</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>Shop & Bless</div>
+            </div>
+        </div>
+
+        <div class="benefits">
+            <div class="benefit-card">
+                <div class="icon">🚀</div>
+                <h4>Instant Generation</h4>
+                <p>Get affiliate links in seconds with one click</p>
+            </div>
+            <div class="benefit-card">
+                <div class="icon">💝</div>
+                <h4>Support Charity</h4>
+                <p>Every purchase makes a meaningful difference</p>
+            </div>
+            <div class="benefit-card">
+                <div class="icon">🔗</div>
+                <h4>All Link Types</h4>
+                <p>Works with full URLs and short links</p>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <h3>🌟 How Buy and Bless Works:</h3>
+            <p>1. <strong>Paste</strong> any Amazon product link (full URL or short link)<br>
+               2. <strong>Generate</strong> your charity affiliate link instantly<br>
+               3. <strong>Click "Go to Amazon"</strong> to shop directly<br>
+               4. <strong>Earn</strong> commissions that support charitable causes</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="productLink">📦 Paste Amazon Product Link:</label>
+                <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/PRODUCT_ID or https://amzn.in/d/XXXXXXX">
+            </div>
+            <button onclick="generateAffiliateLink()">✨ Generate Blessing Link</button>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing your link...</p>
+            </div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <h3>🎯 Your Blessing Link is Ready!</h3>
+            <div id="affiliateLink"></div>
+            <div class="button-group">
+                <button onclick="copyToClipboard()" class="copy-btn">📋 Copy Link</button>
+                <button onclick="redirectToAmazon()" class="amazon-btn">🛒 Go to Amazon</button>
+            </div>
+            <p style="margin-top: 15px; font-size: 14px; color: #666;">Click "Go to Amazon" to start shopping and support our charity mission!</p>
+        </div>
+
+        <div class="instructions">
+            <h3>✅ Supported Link Types:</h3>
+            <p>• Full Amazon URLs: <code>https://www.amazon.in/dp/B0B8N5WRWNW</code></p>
+            <p>• Short Links: <code>https://amzn.in/d/XXXXXXX</code></p>
+            <p>• All link formats work perfectly with our system!</p>
+        </div>
+
+        <div class="footer">
+            <h3>💙 Making a Difference Together</h3>
+            <p>Every purchase through your Buy and Bless links helps support charitable causes while providing value to your community.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentAffiliateLink = '';
+
+        async function generateAffiliateLink() {
+            const productLink = document.getElementById('productLink').value;
+            
+            if (!productLink) {
+                alert('Please paste an Amazon product link to create your blessing link!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+
+            try {
+                // YOUR AMAZON AFFILIATE TAG - CONFIRMED WORKING!
+                const affiliateTag = 'buyandbless-21';
+                
+                let affiliateLink;
+
+                if (productLink.includes('amzn.in/d/') || productLink.includes('amzn.to/')) {
+                    // For short links - use the original short link and append tag
+                    // This preserves Amazon's redirect while adding your affiliate tag
+                    affiliateLink = productLink + '?tag=' + affiliateTag;
+                } else {
+                    // For regular links, extract product ID
+                    let productId = extractProductId(productLink);
+                    
+                    if (!productId) {
+                        alert('Could not extract product ID. Please check your Amazon link format.');
+                        return;
+                    }
+                    
+                    // Generate proper Amazon India affiliate link
+                    affiliateLink = `https://www.amazon.in/dp/${productId}/?tag=${affiliateTag}`;
+                }
+                
+                currentAffiliateLink = affiliateLink;
+                
+                document.getElementById('affiliateLink').innerHTML = 
+                    `<a href="${currentAffiliateLink}" target="_blank" style="color: #1E90FF; text-decoration: none;">${currentAffiliateLink}</a>`;
+                document.getElementById('resultSection').style.display = 'block';
+                
+                // Smooth scroll to results
+                document.getElementById('resultSection').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+
+            } catch (error) {
+                alert('Error generating link: ' + error.message);
+            } finally {
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function redirectToAmazon() {
+            if (currentAffiliateLink) {
+                // Open Amazon in new tab
+                window.open(currentAffiliateLink, '_blank');
+                
+                // Show confirmation message
+                setTimeout(() => {
+                    alert('🛍️ Happy shopping! Thank you for supporting our charity mission!');
+                }, 1000);
+            } else {
+                alert('Please generate an affiliate link first!');
+            }
+        }
+
+        function extractProductId(url) {
+            // Handle different Amazon URL formats
+            const patterns = [
+                // Amazon India links
+                /amazon\.in\/dp\/([A-Z0-9]{10})/i,
+                /amazon\.in\/.*\/dp\/([A-Z0-9]{10})/i,
+                /amazon\.in\/gp\/product\/([A-Z0-9]{10})/i,
+                
+                // Amazon India other formats
+                /amzn\.in\/dp\/([A-Z0-9]{10})/i,
+                /amzn\.in\/.*\/dp\/([A-Z0-9]{10})/i,
+                /amzn\.in\/gp\/product\/([A-Z0-9]{10})/i
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            
+            return null;
+        }
+
+        function copyToClipboard() {
+            const linkText = currentAffiliateLink;
+            if (linkText) {
+                navigator.clipboard.writeText(linkText).then(function() {
+                    alert('🎉 Blessing link copied to clipboard! Ready to share and make a difference!');
+                });
+            } else {
+                alert('Please generate an affiliate link first!');
+            }
+        }
+
+        document.getElementById('productLink').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateAffiliateLink();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('productLink').focus();
+        });
+    </script>
+</body>
+</html>
