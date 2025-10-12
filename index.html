@@ -388,7 +388,7 @@
         <div class="input-section">
             <div class="input-group">
                 <label for="productLink">📦 Paste Amazon Product Link:</label>
-                <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/PRODUCT_ID or https://amzn.in/d/XXXXXXX">
+                <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/PRODUCT_ID or https://amzn.in/d/XXXXXXX or https://a.co/d/XXXXXX">
             </div>
             <button onclick="generateAffiliateLink()">✨ Generate Blessing Link</button>
             <div class="loading" id="loading">
@@ -452,7 +452,8 @@
             <h3>✅ Supported Link Types:</h3>
             <p>• Full Amazon URLs: <code>https://www.amazon.in/dp/B0B8N5WRWNW</code></p>
             <p>• Short Links: <code>https://amzn.in/d/XXXXXXX</code></p>
-            <p>• All link formats work perfectly with our system!</p>
+            <p>• A.Co Links: <code>https://a.co/d/XXXXXX</code></p>
+            <p>• All Amazon link formats work perfectly with our system!</p>
         </div>
     </div>
 
@@ -477,10 +478,15 @@
                 
                 let affiliateLink;
 
-                if (productLink.includes('amzn.in/d/') || productLink.includes('amzn.to/')) {
-                    // For short links - use the original short link and append tag
+                // Handle ALL types of Amazon short links
+                if (productLink.includes('amzn.in/d/') || 
+                    productLink.includes('amzn.to/') || 
+                    productLink.includes('a.co/d/')) {
+                    
+                    // For ALL short links - use the original short link and append tag
                     // This preserves Amazon's redirect while adding your affiliate tag
                     affiliateLink = productLink + '?tag=' + affiliateTag;
+                    
                 } else {
                     // For regular links, extract product ID
                     let productId = extractProductId(productLink);
@@ -538,7 +544,12 @@
                 // Amazon India other formats
                 /amzn\.in\/dp\/([A-Z0-9]{10})/i,
                 /amzn\.in\/.*\/dp\/([A-Z0-9]{10})/i,
-                /amzn\.in\/gp\/product\/([A-Z0-9]{10})/i
+                /amzn\.in\/gp\/product\/([A-Z0-9]{10})/i,
+                
+                // Amazon.com links
+                /amazon\.com\/dp\/([A-Z0-9]{10})/i,
+                /amazon\.com\/.*\/dp\/([A-Z0-9]{10})/i,
+                /amazon\.com\/gp\/product\/([A-Z0-9]{10})/i
             ];
             
             for (let pattern of patterns) {
