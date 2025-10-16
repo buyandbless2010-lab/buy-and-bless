@@ -23,6 +23,8 @@
             --text: #333333;
             --text-light: #666666;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --warning: #ff9800;
+            --warning-bg: #fff3e0;
         }
         
         body {
@@ -249,6 +251,45 @@
             margin-bottom: 5px;
         }
         
+        .ios-warning {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--warning-bg);
+            border-radius: 10px;
+            border-left: 5px solid var(--warning);
+            display: none;
+        }
+        
+        .ios-warning.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .ios-warning h4 {
+            color: var(--warning);
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ios-warning ol {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .ios-warning li {
+            margin-bottom: 8px;
+            color: #5d4037;
+        }
+        
+        .ios-warning p {
+            font-size: 14px;
+            color: #5d4037;
+            margin-bottom: 5px;
+        }
+        
         .result-container {
             margin-top: 30px;
             padding: 25px;
@@ -462,6 +503,17 @@
                     <button class="generate-btn" id="generateBtn">Generate Blessing Link</button>
                 </div>
                 
+                <div class="ios-warning" id="iosWarning">
+                    <h4><i class="fas fa-exclamation-triangle"></i> iOS Users: Getting Myntra Product URL</h4>
+                    <p>When using Myntra on iPhone, the standard "Share" button copies product details instead of the URL. Follow these steps:</p>
+                    <ol>
+                        <li>Tap the <strong>Share</strong> button in Myntra app</li>
+                        <li>Scroll down and select <strong>"Copy Link"</strong> (not the product name)</li>
+                        <li>Paste the copied link in the field above</li>
+                    </ol>
+                    <p><strong>Alternative method:</strong> Open the product in Safari browser and copy the URL from the address bar.</p>
+                </div>
+                
                 <div class="link-types">
                     <h4>Supported Amazon Link Formats:</h4>
                     <p>• Full URLs: https://www.amazon.in/dp/B0B8N5WRWNW</p>
@@ -517,6 +569,7 @@
             const affiliateLink = document.getElementById('affiliateLink');
             const copyBtn = document.getElementById('copyBtn');
             const redirectBtn = document.getElementById('redirectBtn');
+            const iosWarning = document.getElementById('iosWarning');
             
             // Affiliate Configuration
             const amazonTag = 'buyandbless-21';
@@ -525,6 +578,9 @@
             // State Management
             let currentPlatform = 'amazon';
             let currentGeneratedLink = '';
+            
+            // Detect iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             
             // Platform Switching
             amazonBtn.addEventListener('click', switchToAmazon);
@@ -553,6 +609,9 @@
                 
                 updateUI('Amazon', 'https://www.amazon.in/dp/B0B8N5WRWNW');
                 
+                // Hide iOS warning for Amazon
+                iosWarning.classList.remove('active');
+                
                 document.querySelector('.link-types').innerHTML = `
                     <h4>Supported Amazon Link Formats:</h4>
                     <p>• Full URLs: https://www.amazon.in/dp/B0B8N5WRWNW</p>
@@ -576,6 +635,11 @@
                 `;
                 
                 updateUI('Myntra', 'https://www.myntra.com/example-product');
+                
+                // Show iOS warning for Myntra on iOS devices
+                if (isIOS) {
+                    iosWarning.classList.add('active');
+                }
                 
                 document.querySelector('.link-types').innerHTML = `
                     <h4>Supported Myntra Link Formats:</h4>
@@ -605,6 +669,12 @@
                 
                 if (!originalLink) {
                     alert('Please enter a product link');
+                    return;
+                }
+                
+                // Check if user pasted product description instead of URL (iOS issue)
+                if (currentPlatform === 'myntra' && !originalLink.startsWith('http') && !originalLink.includes('myntra')) {
+                    alert('It looks like you pasted product details instead of the URL. Please follow the iOS instructions above to get the actual product link from Myntra.');
                     return;
                 }
                 
