@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy and Bless - Affiliate Link Generator</title>
+    <title>Buy and Bless - Premium Affiliate Link Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,21 +14,29 @@
         }
         
         :root {
-            --primary: #2e7d32;
-            --primary-light: #4caf50;
-            --secondary: #ff9900;
-            --accent: #ff3f6c;
+            --primary: #1a237e;
+            --primary-light: #303f9f;
+            --primary-glow: #3949ab;
+            --secondary: #ff6d00;
+            --secondary-glow: #ff9100;
+            --accent: #d81b60;
+            --accent-glow: #e91e63;
+            --gold: #ffd700;
             --light-bg: #f8f9fa;
             --white: #ffffff;
-            --text: #333333;
-            --text-light: #666666;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(59, 130, 246, 0.5);
             --warning: #ff9800;
             --warning-bg: #fff3e0;
+            --success: #27ae60;
+            --premium-gradient: linear-gradient(135deg, #1a237e 0%, #303f9f 50%, #3949ab 100%);
+            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
         }
         
         body {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -38,145 +46,211 @@
         }
         
         .container {
-            max-width: 850px;
+            max-width: 900px;
             width: 100%;
             background: var(--white);
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: var(--shadow);
             overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gold-gradient);
+            z-index: 10;
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            background: var(--premium-gradient);
             color: var(--white);
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: glow-pulse 4s ease-in-out infinite alternate;
         }
         
         .logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
         
         .logo-icon {
-            font-size: 36px;
-            margin-right: 15px;
+            font-size: 42px;
+            margin-right: 20px;
             background: var(--white);
             color: var(--primary);
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
         }
         
         h1 {
-            font-size: 36px;
-            margin-bottom: 8px;
+            font-size: 42px;
+            margin-bottom: 10px;
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            background: linear-gradient(45deg, var(--white), #e3f2fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-glow 2s ease-in-out infinite alternate;
         }
         
         .tagline {
-            font-size: 18px;
+            font-size: 20px;
             opacity: 0.95;
             font-style: italic;
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         
         .platform-selector {
             display: flex;
-            padding: 25px;
-            gap: 20px;
+            padding: 30px;
+            gap: 25px;
             justify-content: center;
             background: var(--light-bg);
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 2;
         }
         
         .platform-btn {
             flex: 1;
-            max-width: 220px;
-            padding: 18px;
+            max-width: 240px;
+            padding: 22px;
             border: none;
-            border-radius: 12px;
-            font-size: 17px;
-            font-weight: 600;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .platform-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .platform-btn:hover::before {
+            left: 100%;
         }
         
         .platform-btn.active {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), var(--glow);
+            animation: button-glow 1.5s ease-in-out infinite alternate;
+        }
+        
+        .platform-btn:active {
+            transform: translateY(-2px) scale(1.02);
         }
         
         .amazon-btn {
-            background: linear-gradient(to right, var(--secondary), #ffac31);
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-glow));
             color: var(--white);
         }
         
         .amazon-btn:hover {
-            background: linear-gradient(to right, #e68a00, var(--secondary));
+            background: linear-gradient(135deg, #e65c00, var(--secondary));
         }
         
         .myntra-btn {
-            background: linear-gradient(to right, var(--accent), #ff6b9c);
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
             color: var(--white);
         }
         
         .myntra-btn:hover {
-            background: linear-gradient(to right, #e62e5c, var(--accent));
+            background: linear-gradient(135deg, #c2185b, var(--accent));
         }
         
         .content-area {
-            padding: 35px;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
         }
         
         .platform-info {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding: 20px;
-            border-radius: 12px;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 16px;
             background: var(--light-bg);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary);
+            animation: slideIn 0.6s ease-out;
         }
         
         .platform-logo {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
-            font-size: 24px;
+            border-radius: 12px;
+            font-size: 28px;
             color: var(--white);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
         
         .amazon-logo {
-            background: var(--secondary);
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-glow));
         }
         
         .myntra-logo {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
         }
         
         .platform-text h3 {
-            font-size: 22px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            margin-bottom: 8px;
             color: var(--primary);
+            font-weight: 700;
         }
         
         .platform-text p {
@@ -185,243 +259,357 @@
         }
         
         .form-group {
-            margin-bottom: 30px;
+            margin-bottom: 35px;
+            animation: fadeInUp 0.8s ease-out;
         }
         
         label {
             display: block;
-            margin-bottom: 12px;
-            font-weight: 600;
+            margin-bottom: 15px;
+            font-weight: 700;
             color: var(--primary);
-            font-size: 18px;
+            font-size: 20px;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 3px;
         }
         
         .input-group {
             display: flex;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .input-group:focus-within {
+            border-color: var(--primary-light);
+            box-shadow: 0 8px 25px rgba(49, 130, 206, 0.2);
         }
         
         input {
             flex: 1;
-            padding: 18px;
+            padding: 20px;
             border: none;
-            font-size: 16px;
-            background: var(--light-bg);
+            font-size: 17px;
+            background: var(--white);
+            transition: all 0.3s ease;
         }
         
         input:focus {
             outline: none;
-            background: var(--white);
+            background: #fafafa;
         }
         
         .generate-btn {
-            padding: 18px 30px;
-            background: var(--primary);
+            padding: 20px 35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: var(--white);
             border: none;
-            font-size: 17px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .generate-btn:hover {
-            background: var(--primary-light);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-glow));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4);
         }
         
-        .link-types {
-            margin-top: 20px;
-            padding: 18px;
-            background: #fff8e1;
-            border-radius: 10px;
-            border-left: 5px solid var(--secondary);
+        .generate-btn:active {
+            transform: translateY(0);
         }
         
-        .link-types h4 {
-            color: #e65100;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        
-        .link-types p {
-            font-size: 14px;
-            color: #5d4037;
-            margin-bottom: 5px;
+        .generate-btn.clicked {
+            animation: button-click 0.4s ease;
         }
         
         .ios-warning {
-            margin-top: 15px;
-            padding: 15px;
+            margin-top: 20px;
+            padding: 20px;
             background: var(--warning-bg);
-            border-radius: 10px;
+            border-radius: 12px;
             border-left: 5px solid var(--warning);
             display: none;
+            animation: fadeIn 0.5s ease;
         }
         
         .ios-warning.active {
             display: block;
-            animation: fadeIn 0.5s ease;
         }
         
         .ios-warning h4 {
             color: var(--warning);
-            margin-bottom: 10px;
-            font-size: 16px;
+            margin-bottom: 12px;
+            font-size: 17px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .ios-warning ol {
-            padding-left: 20px;
-            margin-bottom: 10px;
+            padding-left: 25px;
+            margin-bottom: 12px;
         }
         
         .ios-warning li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #5d4037;
+            line-height: 1.5;
         }
         
         .ios-warning p {
-            font-size: 14px;
+            font-size: 15px;
             color: #5d4037;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         
         .result-container {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 12px;
+            margin-top: 35px;
+            padding: 30px;
+            border-radius: 16px;
             background: var(--light-bg);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             display: none;
+            animation: slideInUp 0.6s ease-out;
         }
         
         .result-container.active {
             display: block;
-            animation: fadeIn 0.5s ease;
         }
         
         .result-label {
-            font-weight: 600;
-            margin-bottom: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
             color: var(--primary);
-            font-size: 18px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-label i {
+            color: var(--success);
         }
         
         .result-box {
-            padding: 18px;
+            padding: 20px;
             background: var(--white);
-            border-radius: 10px;
-            border: 1px solid #ddd;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
             word-break: break-all;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-size: 16px;
             color: var(--text);
-            line-height: 1.5;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .result-box:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.1);
         }
         
         .action-buttons {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .copy-btn, .redirect-btn {
+            border-radius: 12px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px;
+            color: white;
+            border: none;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .copy-btn {
-            background: #27ae60;
-            border-radius: 10px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            color: white;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
+            background: linear-gradient(135deg, var(--success), #2ecc71);
         }
         
         .copy-btn:hover {
-            background: #219653;
+            background: linear-gradient(135deg, #219653, var(--success));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
         }
         
         .redirect-btn {
-            background: var(--secondary);
-            border-radius: 10px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            color: white;
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-glow));
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background 0.3s ease;
         }
         
         .redirect-btn:hover {
-            background: #e68a00;
+            background: linear-gradient(135deg, #e65c00, var(--secondary));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 109, 0, 0.4);
         }
         
         .myntra-redirect-btn {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
         }
         
         .myntra-redirect-btn:hover {
-            background: #e62e5c;
+            background: linear-gradient(135deg, #c2185b, var(--accent));
+            box-shadow: 0 8px 20px rgba(216, 27, 96, 0.4);
         }
         
         .blessing-msg {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
             font-style: italic;
             color: var(--primary);
-            font-size: 16px;
+            font-size: 17px;
+            padding: 15px;
+            background: rgba(26, 35, 126, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
         }
         
-        .instructions {
+        .link-formats {
             margin-top: 30px;
             padding: 25px;
-            background: #e8f4fc;
+            background: #e8f5e9;
             border-radius: 12px;
-            border-left: 5px solid #3498db;
+            border-left: 5px solid var(--success);
+            animation: fadeIn 0.8s ease-out;
         }
         
-        .instructions h3 {
+        .link-formats h3 {
             margin-bottom: 15px;
-            color: #2c3e50;
-            font-size: 20px;
+            color: #2e7d32;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .instructions ul {
+        .link-formats ul {
             padding-left: 20px;
         }
         
-        .instructions li {
-            margin-bottom: 10px;
-            color: #2c3e50;
+        .link-formats li {
+            margin-bottom: 8px;
+            color: #2e7d32;
             line-height: 1.5;
+            font-size: 15px;
+        }
+        
+        .instructions {
+            margin-top: 40px;
+            padding: 30px;
+            background: #e8f4fc;
+            border-radius: 16px;
+            border-left: 5px solid #3498db;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .instructions ul {
+            padding-left: 25px;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+            color: #2c3e50;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        /* Animations */
+        @keyframes glow-pulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.7; }
+        }
+        
+        @keyframes text-glow {
+            0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6); }
+        }
+        
+        @keyframes button-glow {
+            0% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.5); }
+            100% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 0 25px rgba(59, 130, 246, 0.8); }
+        }
+        
+        @keyframes button-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         footer {
             text-align: center;
-            padding: 25px;
+            padding: 30px;
             background: var(--light-bg);
             color: var(--primary);
-            font-size: 15px;
+            font-size: 16px;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 2;
         }
         
         @media (max-width: 768px) {
@@ -453,11 +641,20 @@
             }
             
             h1 {
-                font-size: 28px;
+                font-size: 32px;
             }
             
             .tagline {
-                font-size: 16px;
+                font-size: 18px;
+            }
+            
+            .logo {
+                flex-direction: column;
+            }
+            
+            .logo-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -500,7 +697,9 @@
                 <label for="productLink" id="linkLabel">Paste your Amazon product link</label>
                 <div class="input-group">
                     <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/B0B8N5WRWNW">
-                    <button class="generate-btn" id="generateBtn">Generate Blessing Link</button>
+                    <button class="generate-btn" id="generateBtn">
+                        <i class="fas fa-magic"></i> Generate Blessing Link
+                    </button>
                 </div>
                 
                 <div class="ios-warning" id="iosWarning">
@@ -513,17 +712,12 @@
                     </ol>
                     <p><strong>Alternative method:</strong> Open the product in Safari browser and copy the URL from the address bar.</p>
                 </div>
-                
-                <div class="link-types">
-                    <h4>Supported Amazon Link Formats:</h4>
-                    <p>• Full URLs: https://www.amazon.in/dp/B0B8N5WRWNW</p>
-                    <p>• Short Links: https://amzn.in/d/XXXXXXX</p>
-                    <p>• A.Co Links: https://a.co/d/XXXXXX</p>
-                </div>
             </div>
             
             <div class="result-container" id="resultContainer">
-                <div class="result-label">Your Generated Blessing Link:</div>
+                <div class="result-label">
+                    <i class="fas fa-check-circle"></i> Your Generated Blessing Link:
+                </div>
                 <div class="result-box" id="affiliateLink"></div>
                 
                 <div class="action-buttons">
@@ -536,10 +730,17 @@
                 </div>
                 
                 <p class="blessing-msg">Every purchase made through this link contributes to charitable causes!</p>
+                
+                <div class="link-formats" id="linkFormats">
+                    <h3><i class="fas fa-info-circle"></i> Supported Link Formats:</h3>
+                    <ul id="formatsList">
+                        <!-- This will be populated based on the platform -->
+                    </ul>
+                </div>
             </div>
             
             <div class="instructions">
-                <h3>How to Generate & Use Blessing Links</h3>
+                <h3><i class="fas fa-graduation-cap"></i> How to Generate & Use Blessing Links</h3>
                 <ul>
                     <li>Copy any product URL from Amazon or Myntra</li>
                     <li>Paste the link in the input field above</li>
@@ -552,7 +753,7 @@
         </div>
         
         <footer>
-            <p>Buy and Bless - Charity Affiliate Marketing Project &copy; 2025</p>
+            <p>Buy and Bless - Premium Charity Affiliate Marketing Project &copy; 2025</p>
         </footer>
     </div>
 
@@ -570,10 +771,16 @@
             const copyBtn = document.getElementById('copyBtn');
             const redirectBtn = document.getElementById('redirectBtn');
             const iosWarning = document.getElementById('iosWarning');
+            const linkFormats = document.getElementById('linkFormats');
+            const formatsList = document.getElementById('formatsList');
             
-            // Affiliate Configuration
+            // Affiliate Configuration - UPDATED vCommission Tracking
             const amazonTag = 'buyandbless-21';
-            const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
+            const vcommissionTracking = {
+                baseUrl: 'https://www.vcommission.com/affiliate/track',
+                offerId: '10882',    // Replace with your actual Myntra offer ID
+                affiliateId: '122818' // Replace with your actual vCommission affiliate ID
+            };
             
             // State Management
             let currentPlatform = 'amazon';
@@ -587,7 +794,15 @@
             myntraBtn.addEventListener('click', switchToMyntra);
             
             // Generate Link
-            generateBtn.addEventListener('click', generateBlessingLink);
+            generateBtn.addEventListener('click', function() {
+                // Add click animation
+                this.classList.add('clicked');
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 400);
+                
+                generateBlessingLink();
+            });
             
             // Copy to Clipboard
             copyBtn.addEventListener('click', copyToClipboard);
@@ -612,12 +827,8 @@
                 // Hide iOS warning for Amazon
                 iosWarning.classList.remove('active');
                 
-                document.querySelector('.link-types').innerHTML = `
-                    <h4>Supported Amazon Link Formats:</h4>
-                    <p>• Full URLs: https://www.amazon.in/dp/B0B8N5WRWNW</p>
-                    <p>• Short Links: https://amzn.in/d/XXXXXXX</p>
-                    <p>• A.Co Links: https://a.co/d/XXXXXX</p>
-                `;
+                // Set Amazon link formats
+                setLinkFormats('amazon');
             }
             
             function switchToMyntra() {
@@ -634,19 +845,31 @@
                     </div>
                 `;
                 
-                updateUI('Myntra', 'https://www.myntra.com/mailers/topwear/beyoung/beyoung-men-regular-fit-mandarin-collar-textured-cotton-shirt/33976689/buy');
+                updateUI('Myntra', 'https://www.myntra.com/tshirts/highlander/highlander-men-black-solid-polo-collar-t-shirt/01-26964792');
                 
                 // Show iOS warning for Myntra on iOS devices
                 if (isIOS) {
                     iosWarning.classList.add('active');
                 }
                 
-                document.querySelector('.link-types').innerHTML = `
-                    <h4>Supported Myntra Link Formats:</h4>
-                    <p>• Full URLs: https://www.myntra.com/mailers/...</p>
-                    <p>• Social Share Links: https://www.myntra.com/...?utm_source=social_share_pdp...</p>
-                    <p>• All Myntra product links are supported</p>
-                `;
+                // Set Myntra link formats
+                setLinkFormats('myntra');
+            }
+            
+            function setLinkFormats(platform) {
+                if (platform === 'amazon') {
+                    formatsList.innerHTML = `
+                        <li><strong>Full URLs:</strong> https://www.amazon.in/dp/B0B8N5WRWNW</li>
+                        <li><strong>Short Links:</strong> https://amzn.in/d/XXXXXXX</li>
+                        <li><strong>A.Co Links:</strong> https://a.co/d/XXXXXX</li>
+                    `;
+                } else {
+                    formatsList.innerHTML = `
+                        <li><strong>Full URLs:</strong> https://www.myntra.com/tshirts/brand/...</li>
+                        <li><strong>Social Share Links:</strong> https://www.myntra.com/...?utm_source=social_share_pdp...</li>
+                        <li><strong>All Myntra product links</strong> are supported</li>
+                    `;
+                }
             }
             
             function updateActiveButton(activeBtn, inactiveBtn) {
@@ -724,34 +947,50 @@
             
             function createMyntraAffiliateLink(originalUrl) {
                 try {
-                    // Parse the original URL
-                    const url = new URL(originalUrl);
+                    // Create vCommission tracking URL with proper parameters
+                    const trackingUrl = new URL(vcommissionTracking.baseUrl);
+                    trackingUrl.searchParams.append('offer_id', vcommissionTracking.offerId);
+                    trackingUrl.searchParams.append('aff_id', vcommissionTracking.affiliateId);
                     
-                    // Extract just the product path (remove any existing query parameters)
-                    const productPath = url.pathname;
+                    // Clean the Myntra URL before encoding
+                    const cleanMyntraUrl = cleanMyntraProductUrl(originalUrl);
                     
-                    // Create a clean Myntra URL with just the product path
-                    const cleanMyntraUrl = `https://www.myntra.com${productPath}`;
+                    // URL encode the Myntra product URL
+                    trackingUrl.searchParams.append('url', encodeURIComponent(cleanMyntraUrl));
                     
-                    // Create final URL with Myntra affiliate parameters
-                    const finalUrl = new URL(cleanMyntraUrl);
-                    
-                    // Add Myntra affiliate tracking parameters
-                    finalUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
-                    finalUrl.searchParams.set('utm_medium', 'ri_rev');
-                    finalUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
-                    
-                    // Encode the final Myntra URL for vCommission
-                    const encodedUrl = encodeURIComponent(finalUrl.toString());
-                    
-                    // Return the complete vCommission tracking link
-                    return `${vcommissionBase}${encodedUrl}`;
+                    return trackingUrl.toString();
                     
                 } catch (error) {
                     console.error('Error creating Myntra affiliate link:', error);
-                    // Fallback: use the original URL with vCommission
-                    const encodedUrl = encodeURIComponent(originalUrl);
-                    return `${vcommissionBase}${encodedUrl}`;
+                    // Fallback: direct vCommission format
+                    return `${vcommissionTracking.baseUrl}?offer_id=${vcommissionTracking.offerId}&aff_id=${vcommissionTracking.affiliateId}&url=${encodeURIComponent(originalUrl)}`;
+                }
+            }
+            
+            function cleanMyntraProductUrl(url) {
+                try {
+                    const myntraUrl = new URL(url);
+                    
+                    // Keep only essential parameters that Myntra needs
+                    const essentialParams = ['pvid', 'utm_source', 'utm_medium', 'utm_campaign'];
+                    const newSearchParams = new URLSearchParams();
+                    
+                    // Add essential parameters if they exist
+                    essentialParams.forEach(param => {
+                        if (myntraUrl.searchParams.has(param)) {
+                            newSearchParams.append(param, myntraUrl.searchParams.get(param));
+                        }
+                    });
+                    
+                    // Rebuild URL with only essential parameters
+                    const cleanUrl = `${myntraUrl.origin}${myntraUrl.pathname}`;
+                    const queryString = newSearchParams.toString();
+                    
+                    return queryString ? `${cleanUrl}?${queryString}` : cleanUrl;
+                    
+                } catch (error) {
+                    console.error('Error cleaning Myntra URL:', error);
+                    return url; // Return original if cleaning fails
                 }
             }
             
@@ -769,6 +1008,9 @@
                 redirectBtn.href = link;
                 resultContainer.classList.add('active');
                 
+                // Show link formats after generating link
+                linkFormats.style.display = 'block';
+                
                 // Log for debugging
                 console.log('Generated affiliate link:', link);
             }
@@ -779,17 +1021,20 @@
                 
                 navigator.clipboard.writeText(textToCopy).then(function() {
                     copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    copyBtn.style.background = '#2ecc71';
+                    copyBtn.style.background = 'linear-gradient(135deg, #219653, #27ae60)';
                     
                     setTimeout(function() {
                         copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy to Clipboard';
-                        copyBtn.style.background = '#27ae60';
+                        copyBtn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
                     }, 2000);
                 }).catch(function(err) {
                     console.error('Could not copy text: ', err);
                     alert('Failed to copy link to clipboard');
                 });
             }
+            
+            // Initialize with Amazon formats
+            setLinkFormats('amazon');
         });
     </script>
 </body>
