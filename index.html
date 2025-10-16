@@ -619,7 +619,9 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        generatedLink = addMyntraTracking(originalLink);
+                        // Clean the Myntra URL to ensure it always redirects to the product page
+                        const cleanUrl = cleanMyntraUrl(originalLink);
+                        generatedLink = addMyntraTracking(cleanUrl);
                     } else {
                         showLinkError('Myntra');
                         return;
@@ -649,6 +651,19 @@
                     const separator = link.includes('?') ? '&' : '?';
                     return `${link}${separator}tag=${amazonTag}`;
                 }
+            }
+            
+            function cleanMyntraUrl(url) {
+                // Extract the base product URL without tracking parameters that might cause issues
+                let cleanUrl = url.split('?')[0]; // Remove query parameters
+                
+                // Ensure the URL has the correct format for product pages
+                if (!cleanUrl.includes('/buy') && cleanUrl.match(/\/\d+$/)) {
+                    // If it ends with numbers but no /buy, add /buy to ensure product page redirect
+                    cleanUrl += '/buy';
+                }
+                
+                return cleanUrl;
             }
             
             function addMyntraTracking(link) {
