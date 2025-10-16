@@ -689,9 +689,8 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        // Clean the Myntra URL to ensure it always redirects to the product page
-                        const cleanUrl = cleanMyntraUrl(originalLink);
-                        generatedLink = addMyntraTracking(cleanUrl);
+                        // Use the optimized Myntra URL with proper affiliate parameters
+                        generatedLink = createOptimizedMyntraLink(originalLink);
                     } else {
                         showLinkError('Myntra');
                         return;
@@ -723,6 +722,39 @@
                 }
             }
             
+            function createOptimizedMyntraLink(originalUrl) {
+                try {
+                    // Parse the original URL
+                    const url = new URL(originalUrl);
+                    
+                    // Clean the path - remove /mailers if present
+                    let cleanPath = url.pathname;
+                    if (cleanPath.includes('/mailers/')) {
+                        cleanPath = cleanPath.replace('/mailers', '');
+                    }
+                    
+                    // Build the optimized Myntra URL with proper affiliate parameters
+                    const optimizedUrl = new URL(`https://www.myntra.com${cleanPath}`);
+                    
+                    // Add the affiliate tracking parameters that work with Myntra
+                    optimizedUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
+                    optimizedUrl.searchParams.set('utm_medium', 'ri_rev');
+                    optimizedUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
+                    
+                    // Encode the optimized URL for vCommission
+                    const encodedUrl = encodeURIComponent(optimizedUrl.toString());
+                    
+                    // Return the vCommission tracking link
+                    return `${vcommissionBase}${encodedUrl}`;
+                } catch (error) {
+                    console.error('Error creating optimized Myntra link:', error);
+                    // Fallback to original method if optimization fails
+                    const cleanUrl = cleanMyntraUrl(originalUrl);
+                    const encodedUrl = encodeURIComponent(cleanUrl);
+                    return `${vcommissionBase}${encodedUrl}`;
+                }
+            }
+            
             function cleanMyntraUrl(url) {
                 // Extract the base product URL without tracking parameters that might cause issues
                 let cleanUrl = url.split('?')[0]; // Remove query parameters
@@ -734,11 +766,6 @@
                 }
                 
                 return cleanUrl;
-            }
-            
-            function addMyntraTracking(link) {
-                const encodedUrl = encodeURIComponent(link);
-                return `${vcommissionBase}${encodedUrl}`;
             }
             
             function showLinkError(platform) {
