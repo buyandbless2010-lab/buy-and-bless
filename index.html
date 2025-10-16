@@ -1,777 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy and Bless - Affiliate Link Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #2e7d32;
-            --primary-light: #4caf50;
-            --secondary: #ff9900;
-            --accent: #ff3f6c;
-            --light-bg: #f8f9fa;
-            --white: #ffffff;
-            --text: #333333;
-            --text-light: #666666;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --warning: #ff9800;
-            --warning-bg: #fff3e0;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            color: var(--text);
-        }
-        
-        .container {
-            max-width: 850px;
-            width: 100%;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: var(--white);
-            padding: 30px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        
-        .logo-icon {
-            font-size: 36px;
-            margin-right: 15px;
-            background: var(--white);
-            color: var(--primary);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        h1 {
-            font-size: 36px;
-            margin-bottom: 8px;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .tagline {
-            font-size: 18px;
-            opacity: 0.95;
-            font-style: italic;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .platform-selector {
-            display: flex;
-            padding: 25px;
-            gap: 20px;
-            justify-content: center;
-            background: var(--light-bg);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .platform-btn {
-            flex: 1;
-            max-width: 220px;
-            padding: 18px;
-            border: none;
-            border-radius: 12px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: var(--shadow);
-        }
-        
-        .platform-btn.active {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-        
-        .amazon-btn {
-            background: linear-gradient(to right, var(--secondary), #ffac31);
-            color: var(--white);
-        }
-        
-        .amazon-btn:hover {
-            background: linear-gradient(to right, #e68a00, var(--secondary));
-        }
-        
-        .myntra-btn {
-            background: linear-gradient(to right, var(--accent), #ff6b9c);
-            color: var(--white);
-        }
-        
-        .myntra-btn:hover {
-            background: linear-gradient(to right, #e62e5c, var(--accent));
-        }
-        
-        .content-area {
-            padding: 35px;
-        }
-        
-        .platform-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding: 20px;
-            border-radius: 12px;
-            background: var(--light-bg);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-        
-        .platform-logo {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 24px;
-            color: var(--white);
-        }
-        
-        .amazon-logo {
-            background: var(--secondary);
-        }
-        
-        .myntra-logo {
-            background: var(--accent);
-        }
-        
-        .platform-text h3 {
-            font-size: 22px;
-            margin-bottom: 5px;
-            color: var(--primary);
-        }
-        
-        .platform-text p {
-            color: var(--text-light);
-            font-size: 16px;
-        }
-        
-        .form-group {
-            margin-bottom: 30px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 12px;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 18px;
-        }
-        
-        .input-group {
-            display: flex;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        
-        input {
-            flex: 1;
-            padding: 18px;
-            border: none;
-            font-size: 16px;
-            background: var(--light-bg);
-        }
-        
-        input:focus {
-            outline: none;
-            background: var(--white);
-        }
-        
-        .generate-btn {
-            padding: 18px 30px;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        
-        .generate-btn:hover {
-            background: var(--primary-light);
-        }
-        
-        .link-types {
-            margin-top: 20px;
-            padding: 18px;
-            background: #fff8e1;
-            border-radius: 10px;
-            border-left: 5px solid var(--secondary);
-        }
-        
-        .link-types h4 {
-            color: #e65100;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        
-        .link-types p {
-            font-size: 14px;
-            color: #5d4037;
-            margin-bottom: 5px;
-        }
-        
-        .ios-warning {
-            margin-top: 15px;
-            padding: 15px;
-            background: var(--warning-bg);
-            border-radius: 10px;
-            border-left: 5px solid var(--warning);
-            display: none;
-        }
-        
-        .ios-warning.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .ios-warning h4 {
-            color: var(--warning);
-            margin-bottom: 10px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .ios-warning ol {
-            padding-left: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .ios-warning li {
-            margin-bottom: 8px;
-            color: #5d4037;
-        }
-        
-        .ios-warning p {
-            font-size: 14px;
-            color: #5d4037;
-            margin-bottom: 5px;
-        }
-        
-        .result-container {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 12px;
-            background: var(--light-bg);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            display: none;
-        }
-        
-        .result-container.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .result-label {
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--primary);
-            font-size: 18px;
-        }
-        
-        .result-box {
-            padding: 18px;
-            background: var(--white);
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            word-break: break-all;
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: var(--text);
-            line-height: 1.5;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .copy-btn {
-            background: #27ae60;
-            border-radius: 10px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            color: white;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            background: #219653;
-        }
-        
-        .redirect-btn {
-            background: var(--secondary);
-            border-radius: 10px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background 0.3s ease;
-        }
-        
-        .redirect-btn:hover {
-            background: #e68a00;
-        }
-        
-        .myntra-redirect-btn {
-            background: var(--accent);
-        }
-        
-        .myntra-redirect-btn:hover {
-            background: #e62e5c;
-        }
-        
-        .blessing-msg {
-            text-align: center;
-            margin-top: 15px;
-            font-style: italic;
-            color: var(--primary);
-            font-size: 16px;
-        }
-        
-        .instructions {
-            margin-top: 30px;
-            padding: 25px;
-            background: #e8f4fc;
-            border-radius: 12px;
-            border-left: 5px solid #3498db;
-        }
-        
-        .instructions h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-            font-size: 20px;
-        }
-        
-        .instructions ul {
-            padding-left: 20px;
-        }
-        
-        .instructions li {
-            margin-bottom: 10px;
-            color: #2c3e50;
-            line-height: 1.5;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        footer {
-            text-align: center;
-            padding: 25px;
-            background: var(--light-bg);
-            color: var(--primary);
-            font-size: 15px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        @media (max-width: 768px) {
-            .platform-selector {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .platform-btn {
-                max-width: 100%;
-                width: 100%;
-            }
-            
-            .input-group {
-                flex-direction: column;
-            }
-            
-            input, .generate-btn {
-                width: 100%;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .platform-info {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
-            
-            .tagline {
-                font-size: 16px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy and Bless | Affiliate Link Generator</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7ff, #ffffff);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #0077cc;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 5px 0 20px;
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 450px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      background-color: #0077cc;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px dashed #0077cc;
+      border-radius: 10px;
+      word-wrap: break-word;
+      background-color: #f0f8ff;
+      display: none;
+    }
+
+    .result a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #777;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-hands-helping"></i>
-                </div>
-                <div>
-                    <h1>Buy and Bless</h1>
-                    <p class="tagline">Transform your shopping into acts of kindness and blessings</p>
-                </div>
-            </div>
-        </header>
-        
-        <div class="platform-selector">
-            <button class="platform-btn amazon-btn active" id="amazonBtn">
-                <i class="fab fa-amazon"></i> Amazon
-            </button>
-            <button class="platform-btn myntra-btn" id="myntraBtn">
-                <i class="fas fa-shopping-bag"></i> Myntra
-            </button>
-        </div>
-        
-        <div class="content-area">
-            <div class="platform-info" id="platformInfo">
-                <div class="platform-logo amazon-logo">
-                    <i class="fab fa-amazon"></i>
-                </div>
-                <div class="platform-text">
-                    <h3>Amazon Blessing Link Generator</h3>
-                    <p>Paste any Amazon product link to create your personalized blessing link</p>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="productLink" id="linkLabel">Paste your Amazon product link</label>
-                <div class="input-group">
-                    <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/B0B8N5WRWNW">
-                    <button class="generate-btn" id="generateBtn">Generate Blessing Link</button>
-                </div>
-                
-                <div class="ios-warning" id="iosWarning">
-                    <h4><i class="fas fa-exclamation-triangle"></i> iOS Users: Getting Myntra Product URL</h4>
-                    <p>When using Myntra on iPhone, the standard "Share" button copies product details instead of the URL. Follow these steps:</p>
-                    <ol>
-                        <li>Tap the <strong>Share</strong> button in Myntra app</li>
-                        <li>Scroll down and select <strong>"Copy Link"</strong> (not the product name)</li>
-                        <li>Paste the copied link in the field above</li>
-                    </ol>
-                    <p><strong>Alternative method:</strong> Open the product in Safari browser and copy the URL from the address bar.</p>
-                </div>
-                
-                <div class="link-types">
-                    <h4>Supported Amazon Link Formats:</h4>
-                    <p>• Full URLs: https://www.amazon.in/dp/B0B8N5WRWNW</p>
-                    <p>• Short Links: https://amzn.in/d/XXXXXXX</p>
-                    <p>• A.Co Links: https://a.co/d/XXXXXX</p>
-                </div>
-            </div>
-            
-            <div class="result-container" id="resultContainer">
-                <div class="result-label">Your Generated Blessing Link:</div>
-                <div class="result-box" id="affiliateLink"></div>
-                
-                <div class="action-buttons">
-                    <button class="copy-btn" id="copyBtn">
-                        <i class="far fa-copy"></i> Copy to Clipboard
-                    </button>
-                    <a href="#" target="_blank" class="redirect-btn" id="redirectBtn">
-                        <i class="fas fa-shopping-cart"></i> Go to Amazon
-                    </a>
-                </div>
-                
-                <p class="blessing-msg">Every purchase made through this link contributes to charitable causes!</p>
-            </div>
-            
-            <div class="instructions">
-                <h3>How to Generate & Use Blessing Links</h3>
-                <ul>
-                    <li>Copy any product URL from Amazon or Myntra</li>
-                    <li>Paste the link in the input field above</li>
-                    <li>Click "Generate Blessing Link" to create your affiliate link</li>
-                    <li>Use the "Copy to Clipboard" button to save your link</li>
-                    <li>Click "Go to Amazon/Myntra" to test the link immediately</li>
-                    <li>Share your blessing links to support charitable causes with every purchase</li>
-                </ul>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Buy and Bless - Charity Affiliate Marketing Project &copy; 2025</p>
-        </footer>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const amazonBtn = document.getElementById('amazonBtn');
-            const myntraBtn = document.getElementById('myntraBtn');
-            const platformInfo = document.getElementById('platformInfo');
-            const linkLabel = document.getElementById('linkLabel');
-            const productLink = document.getElementById('productLink');
-            const generateBtn = document.getElementById('generateBtn');
-            const resultContainer = document.getElementById('resultContainer');
-            const affiliateLink = document.getElementById('affiliateLink');
-            const copyBtn = document.getElementById('copyBtn');
-            const redirectBtn = document.getElementById('redirectBtn');
-            const iosWarning = document.getElementById('iosWarning');
-            
-            // Affiliate Configuration
-            const amazonTag = 'buyandbless-21';
-            const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
-            
-            // State Management
-            let currentPlatform = 'amazon';
-            let currentGeneratedLink = '';
-            
-            // Detect iOS
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            
-            // Platform Switching
-            amazonBtn.addEventListener('click', switchToAmazon);
-            myntraBtn.addEventListener('click', switchToMyntra);
-            
-            // Generate Link
-            generateBtn.addEventListener('click', generateBlessingLink);
-            
-            // Copy to Clipboard
-            copyBtn.addEventListener('click', copyToClipboard);
-            
-            // Platform Switching Functions
-            function switchToAmazon() {
-                currentPlatform = 'amazon';
-                updateActiveButton(amazonBtn, myntraBtn);
-                
-                platformInfo.innerHTML = `
-                    <div class="platform-logo amazon-logo">
-                        <i class="fab fa-amazon"></i>
-                    </div>
-                    <div class="platform-text">
-                        <h3>Amazon Blessing Link Generator</h3>
-                        <p>Paste any Amazon product link to create your personalized blessing link</p>
-                    </div>
-                `;
-                
-                updateUI('Amazon', 'https://www.amazon.in/dp/B0B8N5WRWNW');
-                
-                // Hide iOS warning for Amazon
-                iosWarning.classList.remove('active');
-                
-                document.querySelector('.link-types').innerHTML = `
-                    <h4>Supported Amazon Link Formats:</h4>
-                    <p>• Full URLs: https://www.amazon.in/dp/B0B8N5WRWNW</p>
-                    <p>• Short Links: https://amzn.in/d/XXXXXXX</p>
-                    <p>• A.Co Links: https://a.co/d/XXXXXX</p>
-                `;
-            }
-            
-            function switchToMyntra() {
-                currentPlatform = 'myntra';
-                updateActiveButton(myntraBtn, amazonBtn);
-                
-                platformInfo.innerHTML = `
-                    <div class="platform-logo myntra-logo">
-                        <i class="fas fa-shopping-bag"></i>
-                    </div>
-                    <div class="platform-text">
-                        <h3>Myntra Blessing Link Generator</h3>
-                        <p>Paste any Myntra product link to create your personalized blessing link</p>
-                    </div>
-                `;
-                
-                updateUI('Myntra', 'https://www.myntra.com/mailers/topwear/beyoung/beyoung-men-regular-fit-mandarin-collar-textured-cotton-shirt/33976689/buy');
-                
-                // Show iOS warning for Myntra on iOS devices
-                if (isIOS) {
-                    iosWarning.classList.add('active');
-                }
-                
-                document.querySelector('.link-types').innerHTML = `
-                    <h4>Supported Myntra Link Formats:</h4>
-                    <p>• Full URLs: https://www.myntra.com/mailers/...</p>
-                    <p>• Social Share Links: https://www.myntra.com/...?utm_source=social_share_pdp...</p>
-                    <p>• All Myntra product links are supported</p>
-                `;
-            }
-            
-            function updateActiveButton(activeBtn, inactiveBtn) {
-                activeBtn.classList.add('active');
-                inactiveBtn.classList.remove('active');
-            }
-            
-            function updateUI(platform, placeholder) {
-                linkLabel.textContent = `Paste your ${platform} product link`;
-                productLink.placeholder = placeholder;
-                resultContainer.classList.remove('active');
-                
-                redirectBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Go to ${platform}`;
-                redirectBtn.className = platform === 'Amazon' ? 'redirect-btn' : 'redirect-btn myntra-redirect-btn';
-            }
-            
-            // Link Generation
-            function generateBlessingLink() {
-                const originalLink = productLink.value.trim();
-                
-                if (!originalLink) {
-                    alert('Please enter a product link');
-                    return;
-                }
-                
-                // Check if user pasted product description instead of URL (iOS issue)
-                if (currentPlatform === 'myntra' && !originalLink.startsWith('http') && !originalLink.includes('myntra')) {
-                    alert('It looks like you pasted product details instead of the URL. Please follow the iOS instructions above to get the actual product link from Myntra.');
-                    return;
-                }
-                
-                let generatedLink = '';
-                
-                if (currentPlatform === 'amazon') {
-                    if (isValidAmazonLink(originalLink)) {
-                        generatedLink = addAmazonTag(originalLink);
-                    } else {
-                        showLinkError('Amazon');
-                        return;
-                    }
-                } else if (currentPlatform === 'myntra') {
-                    if (isValidMyntraLink(originalLink)) {
-                        // FIX APPLIED HERE: Simplified Myntra affiliate link creation for deep linking
-                        generatedLink = createMyntraAffiliateLink(originalLink);
-                    } else {
-                        showLinkError('Myntra');
-                        return;
-                    }
-                }
-                
-                displayGeneratedLink(generatedLink);
-            }
-            
-            function isValidAmazonLink(link) {
-                const amazonPatterns = [
-                    /https?:\/\/(www\.)?amazon\./,
-                    /https?:\/\/amzn\.in\//,
-                    /https?:\/\/a\.co\//
-                ];
-                return amazonPatterns.some(pattern => pattern.test(link));
-            }
-            
-            function isValidMyntraLink(link) {
-                return link.includes('myntra.');
-            }
-            
-            function addAmazonTag(link) {
-                if (link.includes('tag=')) {
-                    return link.replace(/tag=[^&]+/, `tag=${amazonTag}`);
-                } else {
-                    const separator = link.includes('?') ? '&' : '?';
-                    return `${link}${separator}tag=${amazonTag}`;
-                }
-            }
-            
-            /**
-             * CORRECTED FUNCTION: Creates a vCommission tracking link that redirects to the specific Myntra product page.
-             * It works by URL-encoding the original product URL and using it as the 'url' parameter.
-             */
-            function createMyntraAffiliateLink(originalUrl) {
-                // 1. URL-encode the *original* Myntra product URL.
-                const encodedUrl = encodeURIComponent(originalUrl);
-                
-                // 2. Return the complete vCommission tracking link with the encoded URL.
-                // This ensures vCommission tracks the click and then redirects the user 
-                // to the specific product page defined in the 'url' parameter.
-                return `${vcommissionBase}${encodedUrl}`;
-            }
-            
-            function showLinkError(platform) {
-                if (platform === 'Amazon') {
-                    alert(`Please enter a valid Amazon product link\n\nSupported formats:\n• Full URLs: https://www.amazon.in/dp/...\n• Short Links: https://amzn.in/d/...\n• A.Co Links: https://a.co/d/...`);
-                } else {
-                    alert('Please enter a valid Myntra product link');
-                }
-            }
-            
-            function displayGeneratedLink(link) {
-                currentGeneratedLink = link;
-                affiliateLink.textContent = link;
-                redirectBtn.href = link;
-                resultContainer.classList.add('active');
-                
-                // Log for debugging
-                console.log('Generated affiliate link:', link);
-            }
-            
-            // Copy to Clipboard
-            function copyToClipboard() {
-                const textToCopy = affiliateLink.textContent;
-                
-                navigator.clipboard.writeText(textToCopy).then(function() {
-                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    copyBtn.style.background = '#2ecc71';
-                    
-                    setTimeout(function() {
-                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy to Clipboard';
-                        copyBtn.style.background = '#27ae60';
-                    }, 2000);
-                }).catch(function(err) {
-                    console.error('Could not copy text: ', err);
-                    alert('Failed to copy link to clipboard');
-                });
-            }
-        });
-    </script>
+  <h1>Buy and Bless</h1>
+  <p>Paste your Amazon / Flipkart / Myntra product link below and get your tracked affiliate link instantly.</p>
+
+  <div class="container">
+    <input type="text" id="productLink" placeholder="Paste your product link here..." />
+    <button onclick="generateLink()">Generate Affiliate Link</button>
+
+    <div class="result" id="resultBox">
+      <p>✅ Your affiliate link is ready:</p>
+      <a id="affiliateLink" href="#" target="_blank"></a>
+    </div>
+  </div>
+
+  <footer>
+    <p>Shop with purpose 💙 Every purchase helps feed street dogs & support poor families.</p>
+  </footer>
+
+  <script>
+    // Replace with your actual affiliate tags
+    const amazonTag = "yourtag-21";
+    const flipkartTag = "affid=yourflipkartid";
+    const myntraTag = "utm_source=affiliates&utm_medium=yourmyntraid";
+
+    function generateLink() {
+      const input = document.getElementById("productLink").value.trim();
+      const resultBox = document.getElementById("resultBox");
+      const affiliateLinkElement = document.getElementById("affiliateLink");
+
+      if (!input) {
+        alert("Please paste a product link first!");
+        return;
+      }
+
+      let finalLink = input;
+
+      // AMAZON
+      if (input.includes("amazon")) {
+        const url = new URL(input);
+        url.searchParams.set("tag", amazonTag);
+        finalLink = url.toString();
+      }
+
+      // FLIPKART
+      else if (input.includes("flipkart")) {
+        const url = new URL(input);
+        if (!url.search.includes("affid=")) {
+          finalLink = input.includes("?")
+            ? `${input}&${flipkartTag}`
+            : `${input}?${flipkartTag}`;
+        } else {
+          finalLink = input;
+        }
+      }
+
+      // MYNTRA
+      else if (input.includes("myntra")) {
+        const url = new URL(input);
+        if (!url.search.includes("utm_source=")) {
+          finalLink = input.includes("?")
+            ? `${input}&${myntraTag}`
+            : `${input}?${myntraTag}`;
+        } else {
+          finalLink = input;
+        }
+      }
+
+      // Display Result
+      affiliateLinkElement.href = finalLink;
+      affiliateLinkElement.textContent = finalLink;
+      resultBox.style.display = "block";
+    }
+  </script>
+
 </body>
 </html>
