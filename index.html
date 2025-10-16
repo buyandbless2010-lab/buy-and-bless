@@ -727,28 +727,17 @@
                     // Parse the original URL
                     const url = new URL(originalUrl);
                     
-                    // Preserve the original path including /mailers
-                    const originalPath = url.pathname;
+                    // Create a clean Myntra URL with JUST the essential product path
+                    // This is the key fix - we use the original path as-is without modifications
+                    const cleanPath = url.pathname;
                     
-                    // Create the final Myntra URL with affiliate parameters
-                    const myntraUrl = new URL(`https://www.myntra.com${originalPath}`);
+                    // Build the final Myntra URL with ONLY the essential affiliate parameters
+                    const myntraUrl = new URL(`https://www.myntra.com${cleanPath}`);
                     
-                    // Add Myntra affiliate parameters - these work better for tracking
+                    // Add ONLY the essential Myntra affiliate parameters
                     myntraUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
                     myntraUrl.searchParams.set('utm_medium', 'ri_rev');
                     myntraUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
-                    
-                    // Also preserve social share parameters if they exist in original URL
-                    const originalParams = new URLSearchParams(url.search);
-                    if (originalParams.has('utm_source') && originalParams.get('utm_source').includes('social_share')) {
-                        myntraUrl.searchParams.set('utm_source_original', originalParams.get('utm_source'));
-                    }
-                    if (originalParams.has('utm_medium') && originalParams.get('utm_medium').includes('deeplink')) {
-                        myntraUrl.searchParams.set('utm_medium_original', originalParams.get('utm_medium'));
-                    }
-                    if (originalParams.has('utm_campaign') && originalParams.get('utm_campaign').includes('social_share')) {
-                        myntraUrl.searchParams.set('utm_campaign_original', originalParams.get('utm_campaign'));
-                    }
                     
                     // Encode the Myntra URL for vCommission
                     const encodedUrl = encodeURIComponent(myntraUrl.toString());
@@ -758,7 +747,7 @@
                     
                 } catch (error) {
                     console.error('Error creating Myntra affiliate link:', error);
-                    // Fallback: use the original URL with vCommission
+                    // Fallback: use the original URL with vCommission (simplest approach)
                     const encodedUrl = encodeURIComponent(originalUrl);
                     return `${vcommissionBase}${encodedUrl}`;
                 }
