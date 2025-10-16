@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -635,7 +634,7 @@
                     </div>
                 `;
                 
-                updateUI('Myntra', 'https://www.myntra.com/example-product');
+                updateUI('Myntra', 'https://www.myntra.com/mailers/topwear/beyoung/beyoung-men-regular-fit-mandarin-collar-textured-cotton-shirt/33976689/buy');
                 
                 // Show iOS warning for Myntra on iOS devices
                 if (isIOS) {
@@ -644,8 +643,8 @@
                 
                 document.querySelector('.link-types').innerHTML = `
                     <h4>Supported Myntra Link Formats:</h4>
-                    <p>• Full URLs: https://www.myntra.com/...</p>
-                    <p>• Mobile Links: https://m.myntra.com/...</p>
+                    <p>• Full URLs: https://www.myntra.com/mailers/...</p>
+                    <p>• Social Share Links: https://www.myntra.com/...?utm_source=social_share_pdp...</p>
                     <p>• All Myntra product links are supported</p>
                 `;
             }
@@ -728,21 +727,28 @@
                     // Parse the original URL
                     const url = new URL(originalUrl);
                     
-                    // Create a clean Myntra URL with the correct path
-                    let cleanPath = url.pathname;
-                    
-                    // Ensure the URL ends with /buy for product pages
-                    if (!cleanPath.endsWith('/buy') && cleanPath.match(/\/\d+$/)) {
-                        cleanPath += '/buy';
-                    }
+                    // Preserve the original path including /mailers
+                    const originalPath = url.pathname;
                     
                     // Create the final Myntra URL with affiliate parameters
-                    const myntraUrl = new URL(`https://www.myntra.com${cleanPath}`);
+                    const myntraUrl = new URL(`https://www.myntra.com${originalPath}`);
                     
-                    // Add Myntra affiliate parameters
+                    // Add Myntra affiliate parameters - these work better for tracking
                     myntraUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
                     myntraUrl.searchParams.set('utm_medium', 'ri_rev');
                     myntraUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
+                    
+                    // Also preserve social share parameters if they exist in original URL
+                    const originalParams = new URLSearchParams(url.search);
+                    if (originalParams.has('utm_source') && originalParams.get('utm_source').includes('social_share')) {
+                        myntraUrl.searchParams.set('utm_source_original', originalParams.get('utm_source'));
+                    }
+                    if (originalParams.has('utm_medium') && originalParams.get('utm_medium').includes('deeplink')) {
+                        myntraUrl.searchParams.set('utm_medium_original', originalParams.get('utm_medium'));
+                    }
+                    if (originalParams.has('utm_campaign') && originalParams.get('utm_campaign').includes('social_share')) {
+                        myntraUrl.searchParams.set('utm_campaign_original', originalParams.get('utm_campaign'));
+                    }
                     
                     // Encode the Myntra URL for vCommission
                     const encodedUrl = encodeURIComponent(myntraUrl.toString());
