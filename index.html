@@ -689,7 +689,7 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        // Use the vCommission tracking with the original Myntra URL structure
+                        // Use the vCommission tracking with the original Myntra URL
                         generatedLink = createMyntraAffiliateLink(originalLink);
                     } else {
                         showLinkError('Myntra');
@@ -724,23 +724,9 @@
             
             function createMyntraAffiliateLink(originalUrl) {
                 try {
-                    // Parse the original URL to preserve the complete structure
-                    const url = new URL(originalUrl);
-                    
-                    // KEEP the original path including /mailers/ if present
-                    // This is important for proper Myntra redirects
-                    const originalPath = url.pathname;
-                    
-                    // Create a new URL with the original path and Myntra's affiliate parameters
-                    const affiliateUrl = new URL(`https://www.myntra.com${originalPath}`);
-                    
-                    // Add the affiliate tracking parameters that work with Myntra
-                    affiliateUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
-                    affiliateUrl.searchParams.set('utm_medium', 'ri_rev');
-                    affiliateUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
-                    
-                    // Use vCommission tracking with the properly formatted Myntra URL
-                    const encodedUrl = encodeURIComponent(affiliateUrl.toString());
+                    // Use the original URL as-is for vCommission tracking
+                    // vCommission will handle the redirection to Myntra
+                    const encodedUrl = encodeURIComponent(originalUrl);
                     return `${vcommissionBase}${encodedUrl}`;
                     
                 } catch (error) {
@@ -764,6 +750,9 @@
                 affiliateLink.textContent = link;
                 redirectBtn.href = link;
                 resultContainer.classList.add('active');
+                
+                // Test the link to make sure it's working
+                console.log('Generated affiliate link:', link);
             }
             
             // Copy to Clipboard
