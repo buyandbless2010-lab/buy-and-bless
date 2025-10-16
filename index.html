@@ -689,8 +689,8 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        // Use the vCommission tracking with properly formatted Myntra URL
-                        generatedLink = createMyntraAffiliateLink(originalLink);
+                        // Use the direct Myntra approach - no vCommission wrapper
+                        generatedLink = createDirectMyntraLink(originalLink);
                     } else {
                         showLinkError('Myntra');
                         return;
@@ -722,34 +722,32 @@
                 }
             }
             
-            function createMyntraAffiliateLink(originalUrl) {
+            function createDirectMyntraLink(originalUrl) {
                 try {
                     // Parse the original URL
                     const url = new URL(originalUrl);
                     
-                    // Create a clean Myntra URL with JUST the essential product path
-                    // This is the key fix - we use the original path as-is without modifications
-                    const cleanPath = url.pathname;
+                    // Extract the clean product path
+                    const productPath = url.pathname;
                     
-                    // Build the final Myntra URL with ONLY the essential affiliate parameters
-                    const myntraUrl = new URL(`https://www.myntra.com${cleanPath}`);
+                    // Create a clean Myntra URL with just the product path
+                    const cleanUrl = `https://www.myntra.com${productPath}`;
                     
-                    // Add ONLY the essential Myntra affiliate parameters
-                    myntraUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
-                    myntraUrl.searchParams.set('utm_medium', 'ri_rev');
-                    myntraUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
+                    // Create the final URL with Myntra affiliate parameters
+                    const finalUrl = new URL(cleanUrl);
                     
-                    // Encode the Myntra URL for vCommission
-                    const encodedUrl = encodeURIComponent(myntraUrl.toString());
+                    // Add Myntra affiliate tracking parameters
+                    finalUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
+                    finalUrl.searchParams.set('utm_medium', 'ri_rev');
+                    finalUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
                     
-                    // Return the complete vCommission tracking link
-                    return `${vcommissionBase}${encodedUrl}`;
+                    // Return the direct Myntra URL (no vCommission wrapper)
+                    return finalUrl.toString();
                     
                 } catch (error) {
-                    console.error('Error creating Myntra affiliate link:', error);
-                    // Fallback: use the original URL with vCommission (simplest approach)
-                    const encodedUrl = encodeURIComponent(originalUrl);
-                    return `${vcommissionBase}${encodedUrl}`;
+                    console.error('Error creating Myntra link:', error);
+                    // Fallback: return original URL
+                    return originalUrl;
                 }
             }
             
