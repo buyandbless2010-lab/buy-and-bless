@@ -573,7 +573,6 @@
             
             // Affiliate Configuration
             const amazonTag = 'buyandbless-21';
-            const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
             
             // State Management
             let currentPlatform = 'amazon';
@@ -689,8 +688,8 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        // Use the optimized Myntra URL with proper affiliate parameters
-                        generatedLink = createOptimizedMyntraLink(originalLink);
+                        // Use the direct Myntra affiliate approach (no vCommission wrapper)
+                        generatedLink = createDirectMyntraAffiliateLink(originalLink);
                     } else {
                         showLinkError('Myntra');
                         return;
@@ -722,7 +721,7 @@
                 }
             }
             
-            function createOptimizedMyntraLink(originalUrl) {
+            function createDirectMyntraAffiliateLink(originalUrl) {
                 try {
                     // Parse the original URL
                     const url = new URL(originalUrl);
@@ -741,17 +740,13 @@
                     optimizedUrl.searchParams.set('utm_medium', 'ri_rev');
                     optimizedUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
                     
-                    // Encode the optimized URL for vCommission
-                    const encodedUrl = encodeURIComponent(optimizedUrl.toString());
-                    
-                    // Return the vCommission tracking link
-                    return `${vcommissionBase}${encodedUrl}`;
+                    // Return the direct Myntra affiliate link (no vCommission wrapper)
+                    return optimizedUrl.toString();
                 } catch (error) {
                     console.error('Error creating optimized Myntra link:', error);
                     // Fallback to original method if optimization fails
                     const cleanUrl = cleanMyntraUrl(originalUrl);
-                    const encodedUrl = encodeURIComponent(cleanUrl);
-                    return `${vcommissionBase}${encodedUrl}`;
+                    return cleanUrl;
                 }
             }
             
