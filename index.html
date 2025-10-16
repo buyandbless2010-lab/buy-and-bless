@@ -573,6 +573,7 @@
             
             // Affiliate Configuration
             const amazonTag = 'buyandbless-21';
+            const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
             
             // State Management
             let currentPlatform = 'amazon';
@@ -688,8 +689,8 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        // Use the direct Myntra affiliate approach (no vCommission wrapper)
-                        generatedLink = createDirectMyntraAffiliateLink(originalLink);
+                        // Use the vCommission tracking with the original Myntra URL structure
+                        generatedLink = createMyntraAffiliateLink(originalLink);
                     } else {
                         showLinkError('Myntra');
                         return;
@@ -721,46 +722,33 @@
                 }
             }
             
-            function createDirectMyntraAffiliateLink(originalUrl) {
+            function createMyntraAffiliateLink(originalUrl) {
                 try {
-                    // Parse the original URL
+                    // Parse the original URL to preserve the complete structure
                     const url = new URL(originalUrl);
                     
-                    // Clean the path - remove /mailers if present
-                    let cleanPath = url.pathname;
-                    if (cleanPath.includes('/mailers/')) {
-                        cleanPath = cleanPath.replace('/mailers', '');
-                    }
+                    // KEEP the original path including /mailers/ if present
+                    // This is important for proper Myntra redirects
+                    const originalPath = url.pathname;
                     
-                    // Build the optimized Myntra URL with proper affiliate parameters
-                    const optimizedUrl = new URL(`https://www.myntra.com${cleanPath}`);
+                    // Create a new URL with the original path and Myntra's affiliate parameters
+                    const affiliateUrl = new URL(`https://www.myntra.com${originalPath}`);
                     
                     // Add the affiliate tracking parameters that work with Myntra
-                    optimizedUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
-                    optimizedUrl.searchParams.set('utm_medium', 'ri_rev');
-                    optimizedUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
+                    affiliateUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
+                    affiliateUrl.searchParams.set('utm_medium', 'ri_rev');
+                    affiliateUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
                     
-                    // Return the direct Myntra affiliate link (no vCommission wrapper)
-                    return optimizedUrl.toString();
+                    // Use vCommission tracking with the properly formatted Myntra URL
+                    const encodedUrl = encodeURIComponent(affiliateUrl.toString());
+                    return `${vcommissionBase}${encodedUrl}`;
+                    
                 } catch (error) {
-                    console.error('Error creating optimized Myntra link:', error);
-                    // Fallback to original method if optimization fails
-                    const cleanUrl = cleanMyntraUrl(originalUrl);
-                    return cleanUrl;
+                    console.error('Error creating Myntra affiliate link:', error);
+                    // Fallback: use the original URL with vCommission
+                    const encodedUrl = encodeURIComponent(originalUrl);
+                    return `${vcommissionBase}${encodedUrl}`;
                 }
-            }
-            
-            function cleanMyntraUrl(url) {
-                // Extract the base product URL without tracking parameters that might cause issues
-                let cleanUrl = url.split('?')[0]; // Remove query parameters
-                
-                // Ensure the URL has the correct format for product pages
-                if (!cleanUrl.includes('/buy') && cleanUrl.match(/\/\d+$/)) {
-                    // If it ends with numbers but no /buy, add /buy to ensure product page redirect
-                    cleanUrl += '/buy';
-                }
-                
-                return cleanUrl;
             }
             
             function showLinkError(platform) {
