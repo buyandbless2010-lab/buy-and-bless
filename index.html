@@ -689,7 +689,7 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(originalLink)) {
-                        // Use the vCommission tracking with the original Myntra URL
+                        // Use the vCommission tracking with properly formatted Myntra URL
                         generatedLink = createMyntraAffiliateLink(originalLink);
                     } else {
                         showLinkError('Myntra');
@@ -724,9 +724,29 @@
             
             function createMyntraAffiliateLink(originalUrl) {
                 try {
-                    // Use the original URL as-is for vCommission tracking
-                    // vCommission will handle the redirection to Myntra
-                    const encodedUrl = encodeURIComponent(originalUrl);
+                    // Parse the original URL
+                    const url = new URL(originalUrl);
+                    
+                    // Create a clean Myntra URL with the correct path
+                    let cleanPath = url.pathname;
+                    
+                    // Ensure the URL ends with /buy for product pages
+                    if (!cleanPath.endsWith('/buy') && cleanPath.match(/\/\d+$/)) {
+                        cleanPath += '/buy';
+                    }
+                    
+                    // Create the final Myntra URL with affiliate parameters
+                    const myntraUrl = new URL(`https://www.myntra.com${cleanPath}`);
+                    
+                    // Add Myntra affiliate parameters
+                    myntraUrl.searchParams.set('utm_campaign', 'dms_trafficaffiliates_ri_rev_122818_');
+                    myntraUrl.searchParams.set('utm_medium', 'ri_rev');
+                    myntraUrl.searchParams.set('utm_source', 'dms_trafficaffiliates');
+                    
+                    // Encode the Myntra URL for vCommission
+                    const encodedUrl = encodeURIComponent(myntraUrl.toString());
+                    
+                    // Return the complete vCommission tracking link
                     return `${vcommissionBase}${encodedUrl}`;
                     
                 } catch (error) {
@@ -751,7 +771,7 @@
                 redirectBtn.href = link;
                 resultContainer.classList.add('active');
                 
-                // Test the link to make sure it's working
+                // Log for debugging
                 console.log('Generated affiliate link:', link);
             }
             
