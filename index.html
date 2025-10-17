@@ -6,6 +6,7 @@
     <title>Buy and Bless - Premium Affiliate Link Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* All your existing CSS remains exactly the same */
         * {
             margin: 0;
             padding: 0;
@@ -858,13 +859,24 @@
                 
                 const extractedUrl = extractUrlFromText(pastedContent);
                 if (!extractedUrl) {
+                    // For Myntra on iOS, if no URL is found, try to search for the product
+                    if (currentPlatform === 'myntra' && isIOS) {
+                        searchMyntraProduct(pastedContent);
+                        return;
+                    }
                     showLinkError(currentPlatform);
                     return;
                 }
                 
                 if (currentPlatform === 'myntra' && !extractedUrl.startsWith('http') && !extractedUrl.includes('myntra')) {
-                    alert('It looks like you pasted product details instead of the URL. Please follow the iOS instructions above to get the actual product link from Myntra.');
-                    return;
+                    // For Myntra on iOS, if the URL doesn't look like a Myntra URL, try to search for the product
+                    if (isIOS) {
+                        searchMyntraProduct(pastedContent);
+                        return;
+                    } else {
+                        alert('It looks like you pasted product details instead of the URL. Please follow the iOS instructions above to get the actual product link from Myntra.');
+                        return;
+                    }
                 }
                 
                 let affiliateLink = '';
@@ -971,6 +983,26 @@
                 } else {
                     alert('Please generate a blessing link first');
                 }
+            }
+            
+            // NEW FUNCTION: Search Myntra product by title for iOS users
+            function searchMyntraProduct(productTitle) {
+                // Create a search URL for Myntra based on the product title
+                const searchQuery = encodeURIComponent(productTitle);
+                const searchUrl = `https://www.myntra.com/${searchQuery}`;
+                
+                // Create affiliate link for the search URL
+                const affiliateLink = createMyntraAffiliateLink(searchUrl);
+                
+                // Display the search URL as the "original link"
+                displayGeneratedLinks(searchUrl, affiliateLink);
+                
+                // Update the UI to show this is a search-based link
+                originalLink.textContent = `Search Link for: "${productTitle}"`;
+                copyOriginalLink(searchUrl);
+                
+                // Show a message explaining what happened
+                alert(`Since you pasted a product title instead of a URL, we've created a search link for "${productTitle}". This will help you find the product on Myntra.`);
             }
         });
     </script>
