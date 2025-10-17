@@ -870,15 +870,23 @@
             
             // Link Generation
             function generateBlessingLink() {
-                const originalLinkValue = productLink.value.trim();
+                const pastedContent = productLink.value.trim();
                 
-                if (!originalLinkValue) {
+                if (!pastedContent) {
                     alert('Please enter a product link');
                     return;
                 }
                 
+                // Extract the URL from the pasted content (remove any text before the URL)
+                const extractedUrl = extractUrlFromText(pastedContent);
+                
+                if (!extractedUrl) {
+                    showLinkError(currentPlatform);
+                    return;
+                }
+                
                 // Check if user pasted product description instead of URL (iOS issue)
-                if (currentPlatform === 'myntra' && !originalLinkValue.startsWith('http') && !originalLinkValue.includes('myntra')) {
+                if (currentPlatform === 'myntra' && !extractedUrl.startsWith('http') && !extractedUrl.includes('myntra')) {
                     alert('It looks like you pasted product details instead of the URL. Please follow the iOS instructions above to get the actual product link from Myntra.');
                     return;
                 }
@@ -886,26 +894,44 @@
                 let affiliateLink = '';
                 
                 if (currentPlatform === 'amazon') {
-                    if (isValidAmazonLink(originalLinkValue)) {
-                        affiliateLink = addAmazonTag(originalLinkValue);
+                    if (isValidAmazonLink(extractedUrl)) {
+                        affiliateLink = addAmazonTag(extractedUrl);
                     } else {
                         showLinkError('Amazon');
                         return;
                     }
                 } else if (currentPlatform === 'myntra') {
-                    if (isValidMyntraLink(originalLinkValue)) {
+                    if (isValidMyntraLink(extractedUrl)) {
                         // Use the direct vCommission tracking URL format
-                        affiliateLink = createMyntraAffiliateLink(originalLinkValue);
+                        affiliateLink = createMyntraAffiliateLink(extractedUrl);
                     } else {
                         showLinkError('Myntra');
                         return;
                     }
                 }
                 
-                displayGeneratedLinks(originalLinkValue, affiliateLink);
+                displayGeneratedLinks(extractedUrl, affiliateLink);
                 
                 // Automatically copy the original product link to clipboard
-                copyOriginalLink(originalLinkValue);
+                copyOriginalLink(extractedUrl);
+            }
+            
+            function extractUrlFromText(text) {
+                // Regular expression to find URLs in text
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                const matches = text.match(urlRegex);
+                
+                if (matches && matches.length > 0) {
+                    // Return the first URL found
+                    return matches[0];
+                }
+                
+                // If no URL found, check if it's already a clean URL
+                if (text.startsWith('http://') || text.startsWith('https://')) {
+                    return text;
+                }
+                
+                return null;
             }
             
             function isValidAmazonLink(link) {
