@@ -381,13 +381,13 @@
             
             <div class="result-container" id="resultContainer">
                 <div class="result-label">
-                    <i class="fas fa-check-circle"></i> Your Product Link:
+                    <i class="fas fa-check-circle"></i> Your Affiliate Link (Copied to Clipboard):
                 </div>
-                <div class="result-box" id="originalLink"></div>
+                <div class="result-box" id="affiliateLink"></div>
                 
                 <div class="action-buttons">
                     <button class="copy-btn" id="copyBtn">
-                        <i class="far fa-copy"></i> Copy Link
+                        <i class="far fa-copy"></i> Copy Affiliate Link
                     </button>
                     <a href="#" target="_blank" class="redirect-btn" id="redirectBtn">
                         <i class="fas fa-shopping-cart"></i> Go to Store
@@ -412,11 +412,12 @@
             const productLink = document.getElementById('productLink');
             const generateBtn = document.getElementById('generateBtn');
             const resultContainer = document.getElementById('resultContainer');
-            const originalLink = document.getElementById('originalLink');
+            const affiliateLink = document.getElementById('affiliateLink');
             const copyBtn = document.getElementById('copyBtn');
             const redirectBtn = document.getElementById('redirectBtn');
             const iosWarning = document.getElementById('iosWarning');
             
+            // Your Tracking Details
             const amazonTag = 'buyandbless-21';
             const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
             
@@ -428,7 +429,7 @@
             };
             
             let currentPlatform = 'amazon';
-            let currentOriginalLink = '';
+            let currentAffiliateLink = '';
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             
             amazonBtn.addEventListener('click', switchToAmazon);
@@ -500,87 +501,125 @@
                     return;
                 }
                 
-                if (currentPlatform === 'myntra' && !extractedUrl.startsWith('http') && !extractedUrl.includes('myntra')) {
-                    if (isIOS) {
-                        findMyntraProductByTitle(pastedContent);
-                        return;
-                    } else {
-                        alert('Please paste the actual product URL, not product details.');
-                        return;
-                    }
-                }
-                
-                let affiliateLink = '';
+                let affiliateLinkUrl = '';
                 if (currentPlatform === 'amazon') {
                     if (isValidAmazonLink(extractedUrl)) {
-                        affiliateLink = addAmazonTag(extractedUrl);
+                        affiliateLinkUrl = addAmazonTag(extractedUrl);
                     } else {
                         showLinkError('Amazon');
                         return;
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(extractedUrl)) {
-                        affiliateLink = createMyntraAffiliateLink(extractedUrl);
+                        affiliateLinkUrl = createMyntraAffiliateLink(extractedUrl);
                     } else {
                         showLinkError('Myntra');
                         return;
                     }
                 }
                 
-                displayGeneratedLinks(extractedUrl, affiliateLink);
-                copyOriginalLink(extractedUrl);
+                displayGeneratedLink(affiliateLinkUrl);
+                copyAffiliateLink(affiliateLinkUrl);
             }
             
             function extractUrlFromText(text) {
-                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                // More comprehensive URL extraction
+                const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`[\]]+)/g;
                 const matches = text.match(urlRegex);
                 if (matches && matches.length > 0) return matches[0];
                 if (text.startsWith('http://') || text.startsWith('https://')) return text;
+                if (text.startsWith('www.')) return 'https://' + text;
                 return null;
             }
             
             function isValidAmazonLink(link) {
-                return /https?:\/\/(www\.)?amazon\./.test(link) || 
-                       /https?:\/\/amzn\.in\//.test(link) || 
-                       /https?:\/\/a\.co\//.test(link);
+                // Comprehensive Amazon URL patterns
+                const amazonPatterns = [
+                    /https?:\/\/(www\.)?amazon\./i,
+                    /https?:\/\/amzn\./i,
+                    /https?:\/\/a\.co\//i,
+                    /https?:\/\/amazon\..+\/dp\//i,
+                    /https?:\/\/amazon\..+\/gp\//i,
+                    /https?:\/\/amazon\..+\/product\//i,
+                    /https?:\/\/(www\.)?amazon\.[a-z]{2,3}\.[a-z]{2,3}\//i, // For country specific domains
+                    /https?:\/\/(www\.)?amazon\.[a-z]{2,3}\//i
+                ];
+                return amazonPatterns.some(pattern => pattern.test(link));
             }
             
             function isValidMyntraLink(link) {
-                return /https?:\/\/(www\.)?myntra\./.test(link) || 
-                       /https?:\/\/m\.myntra\./.test(link) || 
-                       link.includes('myntra');
+                // Comprehensive Myntra URL patterns
+                const myntraPatterns = [
+                    /https?:\/\/(www\.)?myntra\./i,
+                    /https?:\/\/m\.myntra\./i,
+                    /myntra:\/\//i,
+                    /https?:\/\/myntra\..+\//i,
+                    /https?:\/\/(www\.)?myntra\.[a-z]{2,3}\//i
+                ];
+                return myntraPatterns.some(pattern => pattern.test(link)) || 
+                       link.toLowerCase().includes('myntra');
             }
             
             function addAmazonTag(link) {
-                if (link.includes('tag=')) {
-                    return link.replace(/tag=[^&]+/, `tag=${amazonTag}`);
-                } else {
-                    const separator = link.includes('?') ? '&' : '?';
-                    return `${link}${separator}tag=${amazonTag}`;
+                // Enhanced Amazon tag addition for all URL types
+                try {
+                    let url = new URL(link);
+                    
+                    // Remove existing affiliate tags if any
+                    url.searchParams.delete('tag');
+                    url.searchParams.delete('linkCode');
+                    url.searchParams.delete('ascsubtag');
+                    
+                    // Add your affiliate tag
+                    url.searchParams.set('tag', amazonTag);
+                    
+                    return url.toString();
+                } catch (error) {
+                    // Fallback for malformed URLs
+                    console.log('URL parsing failed, using fallback:', error);
+                    if (link.includes('tag=')) {
+                        return link.replace(/tag=[^&]+/, `tag=${amazonTag}`);
+                    } else if (link.includes('?')) {
+                        return `${link}&tag=${amazonTag}`;
+                    } else {
+                        return `${link}?tag=${amazonTag}`;
+                    }
                 }
             }
             
             function createMyntraAffiliateLink(originalUrl) {
-                const encodedUrl = encodeURIComponent(originalUrl);
-                return `${vcommissionBase}${encodedUrl}`;
+                // Enhanced URL encoding for Myntra
+                try {
+                    const encodedUrl = encodeURIComponent(originalUrl);
+                    return `${vcommissionBase}${encodedUrl}`;
+                } catch (error) {
+                    console.log('URL encoding failed, using original:', error);
+                    return `${vcommissionBase}${encodeURIComponent(originalUrl)}`;
+                }
             }
             
             function showLinkError(platform) {
-                alert(`Please enter a valid ${platform} product link`);
+                if (platform === 'Amazon') {
+                    alert(`Please enter a valid Amazon product link\n\nSupported formats:\n• https://www.amazon.in/dp/PRODUCT_ID\n• https://amzn.in/d/PRODUCT_ID\n• https://a.co/d/PRODUCT_ID\n• Any Amazon product page URL`);
+                } else {
+                    alert(`Please enter a valid Myntra product link\n\nSupported formats:\n• https://www.myntra.com/product-url\n• https://m.myntra.com/product-url\n• Any Myntra product page URL`);
+                }
             }
             
-            function displayGeneratedLinks(originalLinkValue, affiliateLinkValue) {
-                currentOriginalLink = originalLinkValue;
-                originalLink.textContent = originalLinkValue;
-                redirectBtn.href = affiliateLinkValue;
+            function displayGeneratedLink(affiliateLinkUrl) {
+                currentAffiliateLink = affiliateLinkUrl;
+                affiliateLink.textContent = affiliateLinkUrl;
+                redirectBtn.href = affiliateLinkUrl;
                 resultContainer.classList.add('active');
+                
+                console.log('Generated Affiliate Link:', affiliateLinkUrl);
             }
             
-            function copyOriginalLink(link) {
+            function copyAffiliateLink(link) {
                 navigator.clipboard.writeText(link).then(function() {
                     copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                     setTimeout(function() {
-                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy Link';
+                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy Affiliate Link';
                     }, 2000);
                 }).catch(function(err) {
                     alert('Failed to copy link to clipboard');
@@ -588,8 +627,8 @@
             }
             
             function copyToClipboard() {
-                if (currentOriginalLink) {
-                    copyOriginalLink(currentOriginalLink);
+                if (currentAffiliateLink) {
+                    copyAffiliateLink(currentAffiliateLink);
                 } else {
                     alert('Please generate a blessing link first');
                 }
@@ -623,9 +662,9 @@
                     alert(`Found product: "${productTitle}"`);
                 }
                 
-                const affiliateLink = createMyntraAffiliateLink(foundUrl);
-                displayGeneratedLinks(foundUrl, affiliateLink);
-                copyOriginalLink(foundUrl);
+                const affiliateLinkUrl = createMyntraAffiliateLink(foundUrl);
+                displayGeneratedLink(affiliateLinkUrl);
+                copyAffiliateLink(affiliateLinkUrl);
             }
         });
     </script>
