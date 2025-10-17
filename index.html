@@ -776,7 +776,7 @@
             const redirectBtn = document.getElementById('redirectBtn');
             const iosWarning = document.getElementById('iosWarning');
             
-            // Affiliate Configuration - FIXED vCommission Tracking
+            // Affiliate Configuration
             const amazonTag = 'buyandbless-21';
             const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
             
@@ -794,23 +794,17 @@
             
             // Generate Link
             generateBtn.addEventListener('click', function() {
-                // Add click animation
                 this.classList.add('clicked');
-                setTimeout(() => {
-                    this.classList.remove('clicked');
-                }, 400);
-                
+                setTimeout(() => this.classList.remove('clicked'), 400);
                 generateBlessingLink();
             });
             
             // Copy to Clipboard
             copyBtn.addEventListener('click', copyToClipboard);
             
-            // Platform Switching Functions
             function switchToAmazon() {
                 currentPlatform = 'amazon';
                 updateActiveButton(amazonBtn, myntraBtn);
-                
                 platformInfo.innerHTML = `
                     <div class="platform-logo amazon-logo">
                         <i class="fab fa-amazon"></i>
@@ -820,13 +814,8 @@
                         <p>Paste any Amazon product link to create your personalized blessing link</p>
                     </div>
                 `;
-                
                 updateUI('Amazon', 'https://www.amazon.in/dp/B0B8N5WRWNW');
-                
-                // Hide iOS warning for Amazon
                 iosWarning.classList.remove('active');
-                
-                // Update redirect button for Amazon
                 redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Amazon';
                 redirectBtn.className = 'redirect-btn';
             }
@@ -834,7 +823,6 @@
             function switchToMyntra() {
                 currentPlatform = 'myntra';
                 updateActiveButton(myntraBtn, amazonBtn);
-                
                 platformInfo.innerHTML = `
                     <div class="platform-logo myntra-logo">
                         <i class="fas fa-shopping-bag"></i>
@@ -844,15 +832,8 @@
                         <p>Paste any Myntra product link to create your personalized blessing link</p>
                     </div>
                 `;
-                
                 updateUI('Myntra', 'https://www.myntra.com/tshirts/highlander/highlander-men-black-solid-polo-collar-t-shirt/26964792/buy');
-                
-                // Show iOS warning for Myntra on iOS devices
-                if (isIOS) {
-                    iosWarning.classList.add('active');
-                }
-                
-                // Update redirect button for Myntra
+                if (isIOS) iosWarning.classList.add('active');
                 redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Myntra';
                 redirectBtn.className = 'redirect-btn myntra-redirect-btn';
             }
@@ -868,31 +849,25 @@
                 resultContainer.classList.remove('active');
             }
             
-            // Link Generation
             function generateBlessingLink() {
                 const pastedContent = productLink.value.trim();
-                
                 if (!pastedContent) {
                     alert('Please enter a product link');
                     return;
                 }
                 
-                // Extract the URL from the pasted content (remove any text before the URL)
                 const extractedUrl = extractUrlFromText(pastedContent);
-                
                 if (!extractedUrl) {
                     showLinkError(currentPlatform);
                     return;
                 }
                 
-                // Check if user pasted product description instead of URL (iOS issue)
                 if (currentPlatform === 'myntra' && !extractedUrl.startsWith('http') && !extractedUrl.includes('myntra')) {
                     alert('It looks like you pasted product details instead of the URL. Please follow the iOS instructions above to get the actual product link from Myntra.');
                     return;
                 }
                 
                 let affiliateLink = '';
-                
                 if (currentPlatform === 'amazon') {
                     if (isValidAmazonLink(extractedUrl)) {
                         affiliateLink = addAmazonTag(extractedUrl);
@@ -902,7 +877,6 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(extractedUrl)) {
-                        // Create Myntra app deep link for mobile devices
                         affiliateLink = createMyntraAffiliateLink(extractedUrl);
                     } else {
                         showLinkError('Myntra');
@@ -911,26 +885,14 @@
                 }
                 
                 displayGeneratedLinks(extractedUrl, affiliateLink);
-                
-                // Automatically copy the original product link to clipboard
                 copyOriginalLink(extractedUrl);
             }
             
             function extractUrlFromText(text) {
-                // Regular expression to find URLs in text
                 const urlRegex = /(https?:\/\/[^\s]+)/g;
                 const matches = text.match(urlRegex);
-                
-                if (matches && matches.length > 0) {
-                    // Return the first URL found
-                    return matches[0];
-                }
-                
-                // If no URL found, check if it's already a clean URL
-                if (text.startsWith('http://') || text.startsWith('https://')) {
-                    return text;
-                }
-                
+                if (matches && matches.length > 0) return matches[0];
+                if (text.startsWith('http://') || text.startsWith('https://')) return text;
                 return null;
             }
             
@@ -944,7 +906,6 @@
             }
             
             function isValidMyntraLink(link) {
-                // Accept all types of Myntra URLs
                 const myntraPatterns = [
                     /https?:\/\/(www\.)?myntra\./,
                     /https?:\/\/m\.myntra\./,
@@ -964,17 +925,10 @@
             
             function createMyntraAffiliateLink(originalUrl) {
                 try {
-                    // For Myntra, we need to use the web URL format for vCommission
-                    // This will work on both desktop and mobile
                     const encodedUrl = encodeURIComponent(originalUrl);
-                    const affiliateLink = `${vcommissionBase}${encodedUrl}`;
-                    
-                    console.log('Generated Myntra Affiliate Link:', affiliateLink);
-                    return affiliateLink;
-                    
+                    return `${vcommissionBase}${encodedUrl}`;
                 } catch (error) {
                     console.error('Error creating Myntra affiliate link:', error);
-                    // Fallback: direct vCommission format
                     return `${vcommissionBase}${encodeURIComponent(originalUrl)}`;
                 }
             }
@@ -990,29 +944,35 @@
             function displayGeneratedLinks(originalLinkValue, affiliateLinkValue) {
                 currentOriginalLink = originalLinkValue;
                 currentAffiliateLink = affiliateLinkValue;
-                
-                // Show the original product link (not the affiliate link)
                 originalLink.textContent = originalLinkValue;
                 redirectBtn.href = affiliateLinkValue;
-                
-                // Add click event for mobile devices to handle app deep linking
-                redirectBtn.onclick = function(e) {
-                    if (currentPlatform === 'myntra' && isMobileDevice()) {
-                        e.preventDefault();
-                        openMyntraProduct(originalLinkValue);
-                    }
-                };
-                
                 resultContainer.classList.add('active');
-                
-                // Log for debugging
                 console.log('Original product link:', originalLinkValue);
                 console.log('Generated affiliate link:', affiliateLinkValue);
             }
             
-            function isMobileDevice() {
-                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            function copyOriginalLink(link) {
+                navigator.clipboard.writeText(link).then(function() {
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyBtn.style.background = 'linear-gradient(135deg, #219653, #27ae60)';
+                    setTimeout(function() {
+                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy Product Link Again';
+                        copyBtn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Could not copy text: ', err);
+                    alert('Failed to copy link to clipboard');
+                });
             }
             
-            function openMyntraProduct(productUrl) {
-                // Extract product ID
+            function copyToClipboard() {
+                if (currentOriginalLink) {
+                    copyOriginalLink(currentOriginalLink);
+                } else {
+                    alert('Please generate a blessing link first');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
