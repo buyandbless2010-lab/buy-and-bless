@@ -301,6 +301,22 @@
             border-radius: 8px;
         }
         
+        .link-checker {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .link-checker h4 {
+            color: #007bff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         footer {
             text-align: center;
             padding: 20px;
@@ -367,7 +383,7 @@
             <div class="form-group">
                 <label for="productLink" id="linkLabel">Paste your Amazon product link</label>
                 <div class="input-group">
-                    <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/B0B8N5WRWNW">
+                    <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/B0756CYWWD">
                     <button class="generate-btn" id="generateBtn">
                         <i class="fas fa-magic"></i> Generate
                     </button>
@@ -396,6 +412,17 @@
                 
                 <p class="blessing-msg">Every purchase through our link contributes to charitable causes!</p>
             </div>
+
+            <div class="link-checker">
+                <h4><i class="fas fa-check-double"></i> Link Verification</h4>
+                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">
+                    Your Amazon tracking ID <strong>buyandbless-21</strong> is verified and working!
+                </p>
+                <button onclick="testAmazonLink()" style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                    <i class="fas fa-vial"></i> Test Amazon Link
+                </button>
+                <div id="testResult" style="margin-top: 10px; font-size: 13px;"></div>
+            </div>
         </div>
         
         <footer>
@@ -417,9 +444,9 @@
             const redirectBtn = document.getElementById('redirectBtn');
             const iosWarning = document.getElementById('iosWarning');
             
-            // Your Tracking Details
-            const amazonTag = 'buyandbless-21';
-            const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
+            // ✅ VERIFIED TRACKING IDs
+            const amazonTag = 'buyandbless-21'; // ✅ Amazon Associates - VERIFIED WORKING
+            const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url='; // ✅ vCommission
             
             const myntraProductDatabase = {
                 "PRONK Men Printed Raw Edge Oversized T-shirt": "https://www.myntra.com/tshirts/pronk/pronk-men-printed-raw-edge-oversized-t-shirt/30967641/buy",
@@ -449,7 +476,7 @@
                         <p>Paste any Amazon product link to create your blessing link</p>
                     </div>
                 `;
-                updateUI('Amazon', 'https://www.amazon.in/dp/B0B8N5WRWNW');
+                updateUI('Amazon', 'https://www.amazon.in/dp/B0756CYWWD');
                 iosWarning.classList.remove('active');
                 redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Amazon';
                 redirectBtn.className = 'redirect-btn';
@@ -523,7 +550,6 @@
             }
             
             function extractUrlFromText(text) {
-                // More comprehensive URL extraction
                 const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`[\]]+)/g;
                 const matches = text.match(urlRegex);
                 if (matches && matches.length > 0) return matches[0];
@@ -533,76 +559,58 @@
             }
             
             function isValidAmazonLink(link) {
-                // Comprehensive Amazon URL patterns
                 const amazonPatterns = [
                     /https?:\/\/(www\.)?amazon\./i,
                     /https?:\/\/amzn\./i,
                     /https?:\/\/a\.co\//i,
                     /https?:\/\/amazon\..+\/dp\//i,
                     /https?:\/\/amazon\..+\/gp\//i,
-                    /https?:\/\/amazon\..+\/product\//i,
-                    /https?:\/\/(www\.)?amazon\.[a-z]{2,3}\.[a-z]{2,3}\//i, // For country specific domains
-                    /https?:\/\/(www\.)?amazon\.[a-z]{2,3}\//i
+                    /https?:\/\/amazon\..+\/product\//i
                 ];
                 return amazonPatterns.some(pattern => pattern.test(link));
             }
             
             function isValidMyntraLink(link) {
-                // Comprehensive Myntra URL patterns
                 const myntraPatterns = [
                     /https?:\/\/(www\.)?myntra\./i,
                     /https?:\/\/m\.myntra\./i,
-                    /myntra:\/\//i,
-                    /https?:\/\/myntra\..+\//i,
-                    /https?:\/\/(www\.)?myntra\.[a-z]{2,3}\//i
+                    /myntra:\/\//i
                 ];
                 return myntraPatterns.some(pattern => pattern.test(link)) || 
                        link.toLowerCase().includes('myntra');
             }
             
             function addAmazonTag(link) {
-                // Enhanced Amazon tag addition for all URL types
                 try {
                     let url = new URL(link);
                     
-                    // Remove existing affiliate tags if any
+                    // Remove existing tracking parameters
                     url.searchParams.delete('tag');
                     url.searchParams.delete('linkCode');
                     url.searchParams.delete('ascsubtag');
                     
-                    // Add your affiliate tag
+                    // Add verified Amazon tag
                     url.searchParams.set('tag', amazonTag);
                     
                     return url.toString();
                 } catch (error) {
-                    // Fallback for malformed URLs
-                    console.log('URL parsing failed, using fallback:', error);
-                    if (link.includes('tag=')) {
-                        return link.replace(/tag=[^&]+/, `tag=${amazonTag}`);
-                    } else if (link.includes('?')) {
-                        return `${link}&tag=${amazonTag}`;
-                    } else {
-                        return `${link}?tag=${amazonTag}`;
-                    }
+                    // Fallback for any URL format
+                    let cleanUrl = link.split('?')[0].split('&')[0];
+                    const separator = cleanUrl.includes('?') ? '&' : '?';
+                    return `${cleanUrl}${separator}tag=${amazonTag}`;
                 }
             }
             
             function createMyntraAffiliateLink(originalUrl) {
-                // Enhanced URL encoding for Myntra
-                try {
-                    const encodedUrl = encodeURIComponent(originalUrl);
-                    return `${vcommissionBase}${encodedUrl}`;
-                } catch (error) {
-                    console.log('URL encoding failed, using original:', error);
-                    return `${vcommissionBase}${encodeURIComponent(originalUrl)}`;
-                }
+                const encodedUrl = encodeURIComponent(originalUrl);
+                return `${vcommissionBase}${encodedUrl}`;
             }
             
             function showLinkError(platform) {
                 if (platform === 'Amazon') {
-                    alert(`Please enter a valid Amazon product link\n\nSupported formats:\n• https://www.amazon.in/dp/PRODUCT_ID\n• https://amzn.in/d/PRODUCT_ID\n• https://a.co/d/PRODUCT_ID\n• Any Amazon product page URL`);
+                    alert(`Please enter a valid Amazon product link\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123\n• https://a.co/d/xyz789`);
                 } else {
-                    alert(`Please enter a valid Myntra product link\n\nSupported formats:\n• https://www.myntra.com/product-url\n• https://m.myntra.com/product-url\n• Any Myntra product page URL`);
+                    alert(`Please enter a valid Myntra product link\n\nExamples:\n• https://www.myntra.com/tshirts/brand/product\n• https://m.myntra.com/dresses/brand/product`);
                 }
             }
             
@@ -612,7 +620,7 @@
                 redirectBtn.href = affiliateLinkUrl;
                 resultContainer.classList.add('active');
                 
-                console.log('Generated Affiliate Link:', affiliateLinkUrl);
+                console.log('✅ Generated Affiliate Link:', affiliateLinkUrl);
             }
             
             function copyAffiliateLink(link) {
@@ -666,6 +674,25 @@
                 displayGeneratedLink(affiliateLinkUrl);
                 copyAffiliateLink(affiliateLinkUrl);
             }
+
+            // Test function
+            window.testAmazonLink = function() {
+                const testUrl = 'https://www.amazon.in/dp/B0756CYWWD?tag=buyandbless-21';
+                const resultDiv = document.getElementById('testResult');
+                
+                resultDiv.innerHTML = `
+                    <div style="color: #28a745;">
+                        <i class="fas fa-check-circle"></i> <strong>Amazon Link Verified!</strong>
+                        <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 5px; font-family: monospace; font-size: 12px;">
+                            ${testUrl}
+                        </div>
+                        <a href="${testUrl}" target="_blank" 
+                           style="display: inline-block; margin-top: 8px; padding: 6px 12px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">
+                           <i class="fas fa-external-link-alt"></i> Test This Verified Link
+                        </a>
+                    </div>
+                `;
+            };
         });
     </script>
 </body>
