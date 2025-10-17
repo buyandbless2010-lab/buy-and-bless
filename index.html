@@ -301,22 +301,6 @@
             border-radius: 8px;
         }
         
-        .link-checker {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e7f3ff;
-            border-radius: 10px;
-            border-left: 4px solid #007bff;
-        }
-        
-        .link-checker h4 {
-            color: #007bff;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
         footer {
             text-align: center;
             padding: 20px;
@@ -412,17 +396,6 @@
                 
                 <p class="blessing-msg">Every purchase through our link contributes to charitable causes!</p>
             </div>
-
-            <div class="link-checker">
-                <h4><i class="fas fa-check-double"></i> Link Verification</h4>
-                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">
-                    Your Amazon tracking ID <strong>buyandbless-21</strong> is verified and working!
-                </p>
-                <button onclick="testAmazonLink()" style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
-                    <i class="fas fa-vial"></i> Test Amazon Link
-                </button>
-                <div id="testResult" style="margin-top: 10px; font-size: 13px;"></div>
-            </div>
         </div>
         
         <footer>
@@ -444,7 +417,7 @@
             const redirectBtn = document.getElementById('redirectBtn');
             const iosWarning = document.getElementById('iosWarning');
             
-            // ✅ VERIFIED TRACKING IDs
+            // ✅ VERIFIED TRACKING IDs (Hidden from customers)
             const amazonTag = 'buyandbless-21'; // ✅ Amazon Associates - VERIFIED WORKING
             const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url='; // ✅ vCommission
             
@@ -619,8 +592,6 @@
                 affiliateLink.textContent = affiliateLinkUrl;
                 redirectBtn.href = affiliateLinkUrl;
                 resultContainer.classList.add('active');
-                
-                console.log('✅ Generated Affiliate Link:', affiliateLinkUrl);
             }
             
             function copyAffiliateLink(link) {
@@ -674,25 +645,6 @@
                 displayGeneratedLink(affiliateLinkUrl);
                 copyAffiliateLink(affiliateLinkUrl);
             }
-
-            // Test function
-            window.testAmazonLink = function() {
-                const testUrl = 'https://www.amazon.in/dp/B0756CYWWD?tag=buyandbless-21';
-                const resultDiv = document.getElementById('testResult');
-                
-                resultDiv.innerHTML = `
-                    <div style="color: #28a745;">
-                        <i class="fas fa-check-circle"></i> <strong>Amazon Link Verified!</strong>
-                        <div style="background: white; padding: 10px; border-radius: 5px; margin-top: 5px; font-family: monospace; font-size: 12px;">
-                            ${testUrl}
-                        </div>
-                        <a href="${testUrl}" target="_blank" 
-                           style="display: inline-block; margin-top: 8px; padding: 6px 12px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">
-                           <i class="fas fa-external-link-alt"></i> Test This Verified Link
-                        </a>
-                    </div>
-                `;
-            };
         });
     </script>
 </body>
