@@ -902,7 +902,7 @@
                     }
                 } else if (currentPlatform === 'myntra') {
                     if (isValidMyntraLink(extractedUrl)) {
-                        // Use the direct vCommission tracking URL format
+                        // Create Myntra app deep link for mobile devices
                         affiliateLink = createMyntraAffiliateLink(extractedUrl);
                     } else {
                         showLinkError('Myntra');
@@ -964,9 +964,13 @@
             
             function createMyntraAffiliateLink(originalUrl) {
                 try {
-                    // Use the direct vCommission tracking URL format
+                    // For Myntra, we need to use the web URL format for vCommission
+                    // This will work on both desktop and mobile
                     const encodedUrl = encodeURIComponent(originalUrl);
-                    return `${vcommissionBase}${encodedUrl}`;
+                    const affiliateLink = `${vcommissionBase}${encodedUrl}`;
+                    
+                    console.log('Generated Myntra Affiliate Link:', affiliateLink);
+                    return affiliateLink;
                     
                 } catch (error) {
                     console.error('Error creating Myntra affiliate link:', error);
@@ -990,6 +994,15 @@
                 // Show the original product link (not the affiliate link)
                 originalLink.textContent = originalLinkValue;
                 redirectBtn.href = affiliateLinkValue;
+                
+                // Add click event for mobile devices to handle app deep linking
+                redirectBtn.onclick = function(e) {
+                    if (currentPlatform === 'myntra' && isMobileDevice()) {
+                        e.preventDefault();
+                        openMyntraProduct(originalLinkValue);
+                    }
+                };
+                
                 resultContainer.classList.add('active');
                 
                 // Log for debugging
@@ -997,30 +1010,9 @@
                 console.log('Generated affiliate link:', affiliateLinkValue);
             }
             
-            function copyOriginalLink(link) {
-                navigator.clipboard.writeText(link).then(function() {
-                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    copyBtn.style.background = 'linear-gradient(135deg, #219653, #27ae60)';
-                    
-                    setTimeout(function() {
-                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy Product Link Again';
-                        copyBtn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
-                    }, 2000);
-                }).catch(function(err) {
-                    console.error('Could not copy text: ', err);
-                    alert('Failed to copy link to clipboard');
-                });
+            function isMobileDevice() {
+                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             }
             
-            // Copy to Clipboard
-            function copyToClipboard() {
-                if (currentOriginalLink) {
-                    copyOriginalLink(currentOriginalLink);
-                } else {
-                    alert('Please generate a blessing link first');
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+            function openMyntraProduct(productUrl) {
+                // Extract product ID
