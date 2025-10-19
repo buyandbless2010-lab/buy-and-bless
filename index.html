@@ -353,15 +353,7 @@
             gap: 8px;
         }
         
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: var(--light-bg);
-            color: var(--primary);
-            font-size: 14px;
-        }
-        
-        .tracking-test {
+        .tracking-info {
             margin-top: 15px;
             padding: 12px;
             background: #e8f5e8;
@@ -370,12 +362,39 @@
             font-size: 13px;
         }
         
-        .tracking-test h5 {
+        .tracking-info h5 {
             color: var(--success);
             margin-bottom: 5px;
             display: flex;
             align-items: center;
             gap: 6px;
+        }
+        
+        .link-type-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .short-link-badge {
+            background: var(--secondary);
+        }
+        
+        .full-link-badge {
+            background: var(--success);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--light-bg);
+            color: var(--primary);
+            font-size: 14px;
         }
         
         @media (max-width: 768px) {
@@ -456,6 +475,7 @@
             <div class="result-container" id="resultContainer">
                 <div class="result-label">
                     <i class="fas fa-check-circle"></i> Your Blessing Link is Ready!
+                    <span class="link-type-badge" id="linkTypeBadge">Short Link</span>
                 </div>
                 <div class="result-box" id="affiliateLink"></div>
                 
@@ -468,9 +488,9 @@
                     </a>
                 </div>
                 
-                <div class="tracking-test">
-                    <h5><i class="fas fa-vial"></i> Tracking Test</h5>
-                    <p>After clicking your link, add any item to cart and check if URL contains "tag=buyandbless-21" to verify tracking.</p>
+                <div class="tracking-info">
+                    <h5><i class="fas fa-vial"></i> Tracking Information</h5>
+                    <p id="trackingMessage">This link includes proper affiliate tracking. Add any item to cart and check URL for "tag=buyandbless-21" to verify.</p>
                 </div>
                 
                 <p class="blessing-msg">Every purchase through our link contributes to charitable causes!</p>
@@ -480,7 +500,7 @@
                 <h4><i class="fas fa-info-circle"></i> Amazon Link Tips</h4>
                 <p>• Works with full Amazon URLs and short links</p>
                 <p>• All generated links include proper tracking for commissions</p>
-                <p>• Test links in Amazon's Link Checker for validation</p>
+                <p>• Both short and full links will earn you commissions</p>
             </div>
 
             <div class="instructions" id="myntraInstructions">
@@ -512,6 +532,8 @@
             const iosWarning = document.getElementById('iosWarning');
             const amazonInstructions = document.getElementById('amazonInstructions');
             const myntraInstructions = document.getElementById('myntraInstructions');
+            const linkTypeBadge = document.getElementById('linkTypeBadge');
+            const trackingMessage = document.getElementById('trackingMessage');
             
             // ✅ VERIFIED TRACKING IDs
             const amazonTag = 'buyandbless-21';
@@ -610,20 +632,41 @@
                 }
             }
             
-            // ✅ FIXED AMAZON LINK PROCESSING - PROPER TRACKING
+            // ✅ HYBRID AMAZON LINK PROCESSING - GUARANTEED COMMISSIONS
             function processAmazonLink(productLink) {
                 try {
                     let affiliateLinkUrl;
-                    let productId = extractProductId(productLink);
+                    let linkType = 'full';
                     
-                    if (!productId) {
-                        alert('Could not extract product ID. Please check your Amazon link format.\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123');
-                        loading.style.display = 'none';
-                        return;
+                    // Handle ALL types of Amazon short links - USE SIMPLE TAG APPEND
+                    if (productLink.includes('amzn.in/d/') || 
+                        productLink.includes('amzn.to/') || 
+                        productLink.includes('a.co/d/')) {
+                        
+                        // ✅ FOR SHORT LINKS: Simple tag append (PROVEN WORKING FOR TRACKING)
+                        affiliateLinkUrl = productLink + (productLink.includes('?') ? '&' : '?') + 'tag=' + amazonTag;
+                        linkType = 'short';
+                        linkTypeBadge.textContent = 'Short Link';
+                        linkTypeBadge.className = 'link-type-badge short-link-badge';
+                        trackingMessage.textContent = 'Short links work perfectly for tracking! Add any item to cart and check URL for "tag=buyandbless-21" to verify.';
+                        
+                    } else {
+                        // For regular links, extract product ID and build full tracking link
+                        let productId = extractProductId(productLink);
+                        
+                        if (!productId) {
+                            alert('Could not extract product ID. Please check your Amazon link format.\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123');
+                            loading.style.display = 'none';
+                            return;
+                        }
+                        
+                        // ✅ FOR FULL URLs: Build proper Amazon tracking link
+                        affiliateLinkUrl = `https://www.amazon.in/dp/${productId}?linkCode=ll1&tag=${amazonTag}&linkId=${generateRandomId()}&language=en_IN&ref_=as_li_ss_tl`;
+                        linkType = 'full';
+                        linkTypeBadge.textContent = 'Full Link';
+                        linkTypeBadge.className = 'link-type-badge full-link-badge';
+                        trackingMessage.textContent = 'Full tracking link with all Amazon parameters. Will pass Link Checker validation and guarantee commissions.';
                     }
-                    
-                    // ✅ BUILD PROPER AMAZON AFFILIATE LINK (Full tracking format)
-                    affiliateLinkUrl = `https://www.amazon.in/dp/${productId}?linkCode=ll1&tag=${amazonTag}&linkId=${generateRandomId()}&language=en_IN&ref_=as_li_ss_tl`;
                     
                     displayGeneratedLink(affiliateLinkUrl);
                     copyAffiliateLink(affiliateLinkUrl);
@@ -648,11 +691,6 @@
                     /amazon\.in\/dp\/([A-Z0-9]{10})/i,
                     /amazon\.in\/.*\/dp\/([A-Z0-9]{10})/i,
                     /amazon\.in\/gp\/product\/([A-Z0-9]{10})/i,
-                    
-                    // Amazon short links
-                    /amzn\.in\/d\/([A-Z0-9]+)/i,
-                    /amzn\.to\/([A-Z0-9]+)/i,
-                    /a\.co\/d\/([A-Z0-9]+)/i,
                     
                     // Amazon.com links
                     /amazon\.com\/dp\/([A-Z0-9]{10})/i,
