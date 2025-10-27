@@ -18,6 +18,8 @@
             --primary-light: #303f9f;
             --secondary: #ff6d00;
             --accent: #d81b60;
+            --ajio-color: #ff3e6c;
+            --whatsapp-color: #25d366;
             --light-bg: #f8f9fa;
             --white: #ffffff;
             --text: #2c3e50;
@@ -104,6 +106,64 @@
             color: var(--white);
         }
         
+        .ajio-btn {
+            background: linear-gradient(135deg, var(--ajio-color), #ff6b9d);
+            color: var(--white);
+        }
+        
+        .whatsapp-bot-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e8;
+            border-radius: 12px;
+            border-left: 4px solid var(--whatsapp-color);
+            text-align: center;
+            display: none;
+        }
+        
+        .whatsapp-bot-section.active {
+            display: block;
+        }
+        
+        .whatsapp-bot-section h4 {
+            color: var(--whatsapp-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+        
+        .whatsapp-bot-section p {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+        
+        .whatsapp-bot-btn {
+            background: linear-gradient(135deg, var(--whatsapp-color), #128c7e);
+            color: var(--white);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+        
+        .whatsapp-bot-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+        
         .content-area {
             padding: 30px;
         }
@@ -135,6 +195,10 @@
         
         .myntra-logo {
             background: linear-gradient(135deg, var(--accent), #e91e63);
+        }
+        
+        .ajio-logo {
+            background: linear-gradient(135deg, var(--ajio-color), #ff6b9d);
         }
         
         .platform-text h3 {
@@ -331,28 +395,6 @@
             border-radius: 8px;
         }
         
-        .instructions {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e6f7ff;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary);
-            font-size: 14px;
-            display: none;
-        }
-        
-        .instructions.active {
-            display: block;
-        }
-        
-        .instructions h4 {
-            color: var(--primary);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
         .tracking-info {
             margin-top: 15px;
             padding: 12px;
@@ -439,6 +481,9 @@
             <button class="platform-btn myntra-btn" id="myntraBtn">
                 <i class="fas fa-shopping-bag"></i> Myntra
             </button>
+            <button class="platform-btn ajio-btn" id="ajioBtn">
+                <i class="fas fa-shopping-bag"></i> Ajio
+            </button>
         </div>
         
         <div class="content-area">
@@ -452,7 +497,7 @@
                 </div>
             </div>
             
-            <div class="form-group">
+            <div class="form-group" id="formGroup">
                 <label for="productLink" id="linkLabel">Paste your Amazon product link</label>
                 <div class="input-group">
                     <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/B0756CYWWD or https://amzn.in/d/XXXXXXX">
@@ -470,6 +515,24 @@
                     <h4><i class="fas fa-exclamation-triangle"></i> iOS Users Note</h4>
                     <p>When using Myntra on iPhone, use "Copy Link" option instead of product name when sharing.</p>
                 </div>
+            </div>
+            
+            <!-- WhatsApp Bot Section for Amazon & Myntra -->
+            <div class="whatsapp-bot-section" id="whatsappBotSection">
+                <h4><i class="fab fa-whatsapp"></i> Need Help?</h4>
+                <p>Get instant assistance on WhatsApp for generating blessing links!</p>
+                <a href="#" id="whatsappBotLink" class="whatsapp-bot-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Generate via WhatsApp
+                </a>
+            </div>
+            
+            <!-- WhatsApp Only Section for Ajio -->
+            <div class="whatsapp-bot-section" id="whatsappOnlySection">
+                <h4><i class="fab fa-whatsapp"></i> Ajio WhatsApp Assistance</h4>
+                <p>For Ajio products, contact us directly on WhatsApp and we'll help you generate blessing links instantly!</p>
+                <a href="https://wa.me/916281747063?text=Hello!%20I%20need%20help%20generating%20Ajio%20blessing%20links" class="whatsapp-bot-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                </a>
             </div>
             
             <div class="result-container" id="resultContainer">
@@ -495,20 +558,6 @@
                 
                 <p class="blessing-msg">Every purchase through our link contributes to charitable causes!</p>
             </div>
-
-            <div class="instructions" id="amazonInstructions">
-                <h4><i class="fas fa-info-circle"></i> Amazon Link Tips</h4>
-                <p>• Works with full Amazon URLs and short links</p>
-                <p>• All generated links include proper tracking for commissions</p>
-                <p>• Both short and full links will earn you commissions</p>
-            </div>
-
-            <div class="instructions" id="myntraInstructions">
-                <h4><i class="fas fa-info-circle"></i> Myntra Link Tips</h4>
-                <p>• Paste Myntra product links or product names</p>
-                <p>• iOS users: Use "Copy Link" instead of product name</p>
-                <p>• All links include charity tracking</p>
-            </div>
         </div>
         
         <footer>
@@ -520,7 +569,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const amazonBtn = document.getElementById('amazonBtn');
             const myntraBtn = document.getElementById('myntraBtn');
+            const ajioBtn = document.getElementById('ajioBtn');
             const platformInfo = document.getElementById('platformInfo');
+            const formGroup = document.getElementById('formGroup');
             const linkLabel = document.getElementById('linkLabel');
             const productLink = document.getElementById('productLink');
             const generateBtn = document.getElementById('generateBtn');
@@ -530,10 +581,11 @@
             const copyBtn = document.getElementById('copyBtn');
             const redirectBtn = document.getElementById('redirectBtn');
             const iosWarning = document.getElementById('iosWarning');
-            const amazonInstructions = document.getElementById('amazonInstructions');
-            const myntraInstructions = document.getElementById('myntraInstructions');
             const linkTypeBadge = document.getElementById('linkTypeBadge');
             const trackingMessage = document.getElementById('trackingMessage');
+            const whatsappBotSection = document.getElementById('whatsappBotSection');
+            const whatsappOnlySection = document.getElementById('whatsappOnlySection');
+            const whatsappBotLink = document.getElementById('whatsappBotLink');
             
             // ✅ VERIFIED TRACKING IDs
             const amazonTag = 'buyandbless-21';
@@ -552,6 +604,7 @@
             
             amazonBtn.addEventListener('click', switchToAmazon);
             myntraBtn.addEventListener('click', switchToMyntra);
+            ajioBtn.addEventListener('click', switchToAjio);
             generateBtn.addEventListener('click', generateBlessingLink);
             copyBtn.addEventListener('click', copyToClipboard);
             
@@ -564,7 +617,7 @@
             
             function switchToAmazon() {
                 currentPlatform = 'amazon';
-                updateActiveButton(amazonBtn, myntraBtn);
+                updateActiveButton(amazonBtn, [myntraBtn, ajioBtn]);
                 platformInfo.innerHTML = `
                     <div class="platform-logo amazon-logo">
                         <i class="fab fa-amazon"></i>
@@ -576,15 +629,21 @@
                 `;
                 updateUI('Amazon', 'https://www.amazon.in/dp/B0756CYWWD or https://amzn.in/d/XXXXXXX');
                 iosWarning.classList.remove('active');
-                amazonInstructions.classList.add('active');
-                myntraInstructions.classList.remove('active');
+                whatsappOnlySection.classList.remove('active');
+                whatsappBotSection.classList.add('active');
+                formGroup.style.display = 'block';
+                
+                // Update WhatsApp link for Amazon
+                whatsappBotLink.href = "https://wa.me/916281747063?text=Hello!%20I%20need%20help%20generating%20Amazon%20blessing%20links";
+                whatsappBotLink.innerHTML = '<i class="fab fa-whatsapp"></i> Generate via WhatsApp';
+                
                 redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Amazon';
                 redirectBtn.className = 'redirect-btn';
             }
             
             function switchToMyntra() {
                 currentPlatform = 'myntra';
-                updateActiveButton(myntraBtn, amazonBtn);
+                updateActiveButton(myntraBtn, [amazonBtn, ajioBtn]);
                 platformInfo.innerHTML = `
                     <div class="platform-logo myntra-logo">
                         <i class="fas fa-shopping-bag"></i>
@@ -596,20 +655,48 @@
                 `;
                 updateUI('Myntra', 'https://www.myntra.com/tshirts/highlander/highlander-men-black-solid-polo-collar-t-shirt/26964792/buy');
                 if (isIOS) iosWarning.classList.add('active');
-                amazonInstructions.classList.remove('active');
-                myntraInstructions.classList.add('active');
+                whatsappOnlySection.classList.remove('active');
+                whatsappBotSection.classList.add('active');
+                formGroup.style.display = 'block';
+                
+                // Update WhatsApp link for Myntra
+                whatsappBotLink.href = "https://wa.me/916281747063?text=Hello!%20I%20need%20help%20generating%20Myntra%20blessing%20links";
+                whatsappBotLink.innerHTML = '<i class="fab fa-whatsapp"></i> Generate via WhatsApp';
+                
                 redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Myntra';
                 redirectBtn.className = 'redirect-btn myntra-redirect-btn';
             }
             
-            function updateActiveButton(activeBtn, inactiveBtn) {
+            function switchToAjio() {
+                currentPlatform = 'ajio';
+                updateActiveButton(ajioBtn, [amazonBtn, myntraBtn]);
+                platformInfo.innerHTML = `
+                    <div class="platform-logo ajio-logo">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="platform-text">
+                        <h3>Ajio WhatsApp Assistance</h3>
+                        <p>Contact us on WhatsApp for Ajio blessing links</p>
+                    </div>
+                `;
+                // Hide the form group and show only WhatsApp section
+                formGroup.style.display = 'none';
+                resultContainer.classList.remove('active');
+                iosWarning.classList.remove('active');
+                whatsappBotSection.classList.remove('active');
+                whatsappOnlySection.classList.add('active');
+            }
+            
+            function updateActiveButton(activeBtn, inactiveBtns) {
                 activeBtn.classList.add('active');
-                inactiveBtn.classList.remove('active');
+                inactiveBtns.forEach(btn => btn.classList.remove('active'));
             }
             
             function updateUI(platform, placeholder) {
                 linkLabel.textContent = `Paste your ${platform} product link`;
                 productLink.placeholder = placeholder;
+                productLink.disabled = false;
+                generateBtn.disabled = false;
                 resultContainer.classList.remove('active');
             }
             
