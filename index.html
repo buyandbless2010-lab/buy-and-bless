@@ -6,6 +6,7 @@
     <title>Buy and Bless - Affiliate Link Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Your existing CSS remains the same */
         * {
             margin: 0;
             padding: 0;
@@ -492,13 +493,13 @@
                     <i class="fab fa-amazon"></i>
                 </div>
                 <div class="platform-text">
-                    <h3>Amazon Blessing Link Generator</h3>
-                    <p>Paste any Amazon product link to create your blessing link</p>
+                    <h3>Amazon India 🇮🇳 Blessing Links</h3>
+                    <p>Paste Amazon.in links only - Supporting Indian charities</p>
                 </div>
             </div>
             
             <div class="form-group" id="formGroup">
-                <label for="productLink" id="linkLabel">Paste your Amazon product link</label>
+                <label for="productLink" id="linkLabel">Paste your Amazon India product link</label>
                 <div class="input-group">
                     <input type="text" id="productLink" placeholder="https://www.amazon.in/dp/B0756CYWWD or https://amzn.in/d/XXXXXXX">
                     <button class="generate-btn" id="generateBtn">
@@ -547,13 +548,13 @@
                         <i class="far fa-copy"></i> Copy Link
                     </button>
                     <a href="#" target="_blank" class="redirect-btn" id="redirectBtn">
-                        <i class="fas fa-shopping-cart"></i> Go to Store
+                        <i class="fas fa-shopping-cart"></i> Go to Amazon India
                     </a>
                 </div>
                 
                 <div class="tracking-info">
                     <h5><i class="fas fa-vial"></i> Tracking Information</h5>
-                    <p id="trackingMessage">This link includes proper affiliate tracking. Add any item to cart and check URL for "tag=buyandbless-21" to verify.</p>
+                    <p id="trackingMessage">This link includes proper affiliate tracking. Add any item to cart and check URL for "tag=buyandbless21-21" to verify.</p>
                 </div>
                 
                 <p class="blessing-msg">Every purchase through our link contributes to charitable causes!</p>
@@ -587,8 +588,8 @@
             const whatsappOnlySection = document.getElementById('whatsappOnlySection');
             const whatsappBotLink = document.getElementById('whatsappBotLink');
             
-            // ✅ VERIFIED TRACKING IDs
-            const amazonTag = 'buyandbless-21';
+            // ✅ OFFICIAL AMAZON INDIA TRACKING ID
+            const amazonTag = 'buyandbless21-21';
             const vcommissionBase = 'https://track.vcommission.com/click?campaign_id=10882&pub_id=122818&url=';
             
             const myntraProductDatabase = {
@@ -623,21 +624,21 @@
                         <i class="fab fa-amazon"></i>
                     </div>
                     <div class="platform-text">
-                        <h3>Amazon Blessing Link Generator</h3>
-                        <p>Paste any Amazon product link to create your blessing link</p>
+                        <h3>Amazon India 🇮🇳 Blessing Links</h3>
+                        <p>Paste Amazon.in links only - Supporting Indian charities</p>
                     </div>
                 `;
-                updateUI('Amazon', 'https://www.amazon.in/dp/B0756CYWWD or https://amzn.in/d/XXXXXXX');
+                updateUI('Amazon India', 'https://www.amazon.in/dp/B0756CYWWD or https://amzn.in/d/XXXXXXX');
                 iosWarning.classList.remove('active');
                 whatsappOnlySection.classList.remove('active');
                 whatsappBotSection.classList.add('active');
                 formGroup.style.display = 'block';
                 
-                // Update WhatsApp link for Amazon
-                whatsappBotLink.href = "https://wa.me/916281747063?text=Hello!%20I%20need%20help%20generating%20Amazon%20blessing%20links";
+                // Update WhatsApp link for Amazon India
+                whatsappBotLink.href = "https://wa.me/916281747063?text=Hello!%20I%20need%20help%20generating%20Amazon%20India%20blessing%20links";
                 whatsappBotLink.innerHTML = '<i class="fab fa-whatsapp"></i> Generate via WhatsApp';
                 
-                redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Amazon';
+                redirectBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Go to Amazon India';
                 redirectBtn.className = 'redirect-btn';
             }
             
@@ -719,72 +720,79 @@
                 }
             }
             
-            // ✅ HYBRID AMAZON LINK PROCESSING - GUARANTEED COMMISSIONS
+            // ✅ NEW AMAZON INDIA-ONLY LINK PROCESSING
             function processAmazonLink(productLink) {
                 try {
                     let affiliateLinkUrl;
                     let linkType = 'full';
                     
-                    // Handle ALL types of Amazon short links - USE SIMPLE TAG APPEND
-                    if (productLink.includes('amzn.in/d/') || 
-                        productLink.includes('amzn.to/') || 
-                        productLink.includes('a.co/d/')) {
-                        
-                        // ✅ FOR SHORT LINKS: Simple tag append (PROVEN WORKING FOR TRACKING)
+                    // Validate it's an Amazon India link
+                    if (!isValidAmazonIndiaLink(productLink)) {
+                        throw new Error('Please use Amazon India links only (amazon.in or amzn.in)');
+                    }
+                    
+                    // Handle Amazon India short links
+                    if (productLink.includes('amzn.in/d/')) {
+                        // ✅ FOR SHORT LINKS: Simple tag append
                         affiliateLinkUrl = productLink + (productLink.includes('?') ? '&' : '?') + 'tag=' + amazonTag;
                         linkType = 'short';
-                        linkTypeBadge.textContent = 'Short Link';
+                        linkTypeBadge.textContent = 'India Short Link';
                         linkTypeBadge.className = 'link-type-badge short-link-badge';
-                        trackingMessage.textContent = 'Short links work perfectly for tracking! Add any item to cart and check URL for "tag=buyandbless-21" to verify.';
+                        trackingMessage.textContent = 'Amazon India short link with tracking! Verify "tag=' + amazonTag + '" appears in browser URL.';
                         
                     } else {
-                        // For regular links, extract product ID and build full tracking link
+                        // For regular Amazon India URLs, extract product ID
                         let productId = extractProductId(productLink);
                         
                         if (!productId) {
-                            alert('Could not extract product ID. Please check your Amazon link format.\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123');
+                            alert('Could not extract product ID. Please check your Amazon India link format.\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123');
                             loading.style.display = 'none';
                             return;
                         }
                         
-                        // ✅ FOR FULL URLs: Build proper Amazon tracking link
-                        affiliateLinkUrl = `https://www.amazon.in/dp/${productId}?linkCode=ll1&tag=${amazonTag}&linkId=${generateRandomId()}&language=en_IN&ref_=as_li_ss_tl`;
+                        // ✅ FOR FULL INDIA URLs: Build proper Amazon India tracking link
+                        affiliateLinkUrl = `https://www.amazon.in/dp/${productId}?tag=${amazonTag}&linkCode=ll2&linkId=${generateRandomId()}&ref_=as_li_ss_tl`;
                         linkType = 'full';
-                        linkTypeBadge.textContent = 'Full Link';
+                        linkTypeBadge.textContent = 'India Full Link';
                         linkTypeBadge.className = 'link-type-badge full-link-badge';
-                        trackingMessage.textContent = 'Full tracking link with all Amazon parameters. Will pass Link Checker validation and guarantee commissions.';
+                        trackingMessage.textContent = 'Full Amazon India tracking link with all parameters. Guaranteed commission tracking for Indian customers.';
                     }
                     
                     displayGeneratedLink(affiliateLinkUrl);
                     copyAffiliateLink(affiliateLinkUrl);
                     
                 } catch (error) {
-                    alert('Error generating Amazon link: ' + error.message);
+                    alert('Amazon India Error: ' + error.message + '\n\nValid India Examples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123');
                 } finally {
                     loading.style.display = 'none';
                 }
             }
             
-            // Generate random linkId (mimics Amazon's format)
+            // Validate Amazon India links only
+            function isValidAmazonIndiaLink(url) {
+                const indiaPatterns = [
+                    /https?:\/\/(www\.)?amazon\.in\/.*/i,
+                    /https?:\/\/amzn\.in\/.*/i
+                ];
+                return indiaPatterns.some(pattern => pattern.test(url));
+            }
+            
+            // Generate random linkId
             function generateRandomId() {
                 return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             }
             
-            // ✅ IMPROVED PRODUCT ID EXTRACTION
+            // ✅ IMPROVED PRODUCT ID EXTRACTION FOR INDIA ONLY
             function extractProductId(url) {
-                // Handle different Amazon URL formats
-                const patterns = [
-                    // Amazon India links
+                // Amazon India patterns only
+                const indiaPatterns = [
                     /amazon\.in\/dp\/([A-Z0-9]{10})/i,
                     /amazon\.in\/.*\/dp\/([A-Z0-9]{10})/i,
                     /amazon\.in\/gp\/product\/([A-Z0-9]{10})/i,
-                    
-                    // Amazon.com links
-                    /amazon\.com\/dp\/([A-Z0-9]{10})/i,
-                    /amazon\.com\/.*\/dp\/([A-Z0-9]{10})/i
+                    /amazon\.in\/.*\/product\/([A-Z0-9]{10})/i
                 ];
                 
-                for (let pattern of patterns) {
+                for (let pattern of indiaPatterns) {
                     const match = url.match(pattern);
                     if (match && match[1]) {
                         return match[1];
@@ -842,7 +850,7 @@
             
             function showLinkError(platform) {
                 if (platform === 'Amazon') {
-                    alert(`Please enter a valid Amazon product link\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123`);
+                    alert(`Please enter a valid Amazon India product link\n\nExamples:\n• https://www.amazon.in/dp/B0756CYWWD\n• https://amzn.in/d/abc123`);
                 } else {
                     alert(`Please enter a valid Myntra product link\n\nExamples:\n• https://www.myntra.com/tshirts/brand/product\n• Or paste product name for search`);
                 }
